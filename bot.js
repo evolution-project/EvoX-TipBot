@@ -224,7 +224,7 @@ function checkCommand(msg) {
 				case 'height':
 					isAdmin(msg.author.id, function (result) {
 						if (result == true) {
-							msg.author.send("Blockchain height is: " + data.height + );
+							msg.author.send("Blockchain height is: " + data.height + ");
 						}
 					});
 					break;
