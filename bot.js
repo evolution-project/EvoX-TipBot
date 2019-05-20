@@ -97,7 +97,7 @@ function getWalletInfo(callback) {
 			Wallet.balance().then(function (balance) {
 
 
-				callback("Current wallet height is:" + data.height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
+				callback("Current wallet height is: " + data.height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
 
 			});
 
@@ -221,6 +221,13 @@ function checkCommand(msg) {
 					}
 				});
 				break;
+				case 'height':
+					isAdmin(msg.author.id, function (result) {
+						if (result == true) {
+							msg.author.send("Blockchain height is: " + data.height + );
+						}
+					});
+					break;
 			case 'help':
 				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
@@ -794,7 +801,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 								if (log3) console.log("Block matured amount" + bulkdata.payments[i].amount);
 								if (log3) console.log("Block deposit height" + bulkdata.payments[i].block_height);
 								bPaymentFound = true;
-								lastcheckheight = bulkdata.payments[i].block_height + 1; // +1 because wallet getbulkpayments is from >= 
+								lastcheckheight = bulkdata.payments[i].block_height + 1; // +1 because wallet getbulkpayments is from >=
 
 								logBlockChainTransaction(true, null, result.paymentid, null, bulkdata.payments[i].block_height, bulkdata.payments[i].amount);
 
@@ -917,8 +924,3 @@ function getBalance(authorId, msg, callback) {
 
 
 bot.on('message', msg => checkCommand(msg));
-
-
-
-
-
