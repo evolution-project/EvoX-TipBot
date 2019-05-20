@@ -221,6 +221,7 @@ function checkCommand(msg) {
 					}
 				});
 				break;
+<<<<<<< HEAD
 			case 'height':
 			function getWalletInfo(callback) {
 				try {
@@ -230,6 +231,8 @@ function checkCommand(msg) {
 
 					}}});
 					break;
+=======
+>>>>>>> 735cbe1f23846d0099980b39ae3c20988eacb18e
 			case 'help':
 				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
