@@ -226,7 +226,7 @@ function checkCommand(msg) {
 				try {
 				Wallet.height().then(function (data) {
 						if (result == true) {
-							msg.author.send("Blockchain height is: " + data.height + "."");
+							msg.author.send("Blockchain height is: " + data.height + ".");
 
 					}}});
 					break;
