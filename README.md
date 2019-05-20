@@ -39,6 +39,7 @@ nvm install 8.11.2
 ----------------------------------------------------------------------------
 #### Instructions for bot_config.js
 ```
+For Arqma coin start wallet rpc on port 59999
 wallethostname - your wallet RPC server hostname, default is already included
 walletport - your wallet RPC server port, default is already included
 bot_token - get your token from https://discordapp.com/developers/applications/me (as of 22.05.2018). generate user for the bot, and click to reveal the Token
