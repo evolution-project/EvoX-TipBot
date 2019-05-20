@@ -221,10 +221,10 @@ function checkCommand(msg) {
 					}
 				});
 				break;
-				case 'height':
-					isAdmin(msg.author.id, function (result) {
+			case 'height':
+				Wallet.height().then(function (data) {
 						if (result == true) {
-							msg.author.send("Blockchain height is: " + data.height + ");
+							msg.author.send("Blockchain height is: " + data.height + "."");
 						}
 					});
 					break;
