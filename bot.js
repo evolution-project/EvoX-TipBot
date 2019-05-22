@@ -99,7 +99,7 @@ function getWalletInfo(callback) {
 function getBlockInfo(callback) {
 	try {
 		Wallet.height().then(function (data) {
-			callback("Blockchain height is: " + data.height + " :arqma: ");
+			callback("Blockchain height is: " + data.height + " :sunglasses: ");
 		});
 	} catch (error) { callback(error); }
 }
@@ -216,7 +216,7 @@ function checkCommand(msg) {
 				msg.author.send("Hello! This is ArQmA TIP Bot version 0.1. \n Source based on Mojo-LB/CryptonoteTipBot repository :thumbsup: \n Code reworked by ArqTras for Arqma Network ");
 				break;
 			case 'help':
-				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
+				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"!tiparq blockheight\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
 			case 'mybalance':
 				getBalance(msg.author.id, msg, function (data) {
@@ -263,7 +263,7 @@ function checkCommand(msg) {
 				if (tiptarget != null) {
 					TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
 						if (success == true) {
-							msg.channel.send("<@" + tiptarget + "> has been tipped :arqma: " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
+							msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
 						} else { msg.channel.send(message); }
 
 					});
