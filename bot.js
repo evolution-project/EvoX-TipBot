@@ -6,21 +6,14 @@ var moneroWallet = require('arqma-nodejs');
 var Big = require('big.js');
 var config = require('./bot_config');
 
-
 var Wallet = new moneroWallet(config.wallethostname, config.walletport);
-
-
-
-
 
 var bot_token = config.bot_token;
 
 bot.login(bot_token);
 
-
 var MongoClient = require('mongodb').MongoClient;
 var url = config.mongodburl;
-
 
 Initialize();
 
@@ -45,7 +38,6 @@ function Initialize() {
 	Wallet.balance().then(function (balance) {
 		if (log1) console.log("Stats for admins - current balance: " + balance.balance + " " + coin_name);
 	});
-
 
 	MongoClient.connect(url, function (err, dbobj) {
 		if (err) throw err;
@@ -104,7 +96,13 @@ function getWalletInfo(callback) {
 		});
 	} catch (error) { callback(error); }
 }
-
+function getBlockInfo(callback) {
+	try {
+		Wallet.height().then(function (data) {
+			callback("Blockchain height is: " + data.height + " :arqma: ");
+		});
+	} catch (error) { callback(error); }
+}
 
 bot.on('ready', function () {
 	if (log1) console.log("ARQMA TipBot ready and loaded correctly! Hello, admin");
@@ -226,6 +224,13 @@ function checkCommand(msg) {
 
 				});
 				break;
+
+			case 'balance':
+				getBalance(msg.author.id, msg, function (data) {
+					msg.author.send("Hey! Your balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!");
+
+				});
+				break;
 			case 'deposit':
 				getBalance(msg.author.id, msg, function (data) {
 					msg.author.send("Hey! For deposit into the tip bot, use address: " + server_wallet_address + " WITH payment ID " + data.paymentid + " . If PaymentID is missing, your deposit will be lost");
@@ -258,13 +263,18 @@ function checkCommand(msg) {
 				if (tiptarget != null) {
 					TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
 						if (success == true) {
-							msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
+							msg.channel.send("<@" + tiptarget + "> has been tipped :arqma: " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
 						} else { msg.channel.send(message); }
 
 					});
 				} else {
 					msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
 				}
+				break;
+				case 'blockheight':
+				getBlockInfo(function (walletmessage) {
+					msg.channel.send(walletmessage);
+				});
 				break;
 			case 'withdraw':
 				try {
@@ -702,20 +712,9 @@ function TipSomebody(msg, authorId, tipTarget, tiptargetname, tipperauthorname, 
 								});
 
 							});
-
-
-
-
-
 							if (err) throw err;
 							console.log("1 user updated");
 						});
-
-
-
-
-
-
 					} else {
 						msg.reply("You don't have enough balance for that :( ");
 						callback(false);
@@ -906,10 +905,5 @@ function getBalance(authorId, msg, callback) {
 	});
 
 }
-
-
-
-
-
 
 bot.on('message', msg => checkCommand(msg));
