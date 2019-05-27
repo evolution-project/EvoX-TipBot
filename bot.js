@@ -85,16 +85,16 @@ function Initialize() {
 		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.height);
 
 	});
-	Daemon.getInfo().then(function (data) {
-		if (log3) console.log(data);
-		if (log1) console.log("CURRENT info: " + data.get_info);
-
-	});
-	Daemon.getHeight().then(function (data) {
-		if (log3) console.log(data);
-		if (log1) console.log("CURRENT Daemon height: " + data.get_height);
-
-	});
+//	Daemon.getInfo().then(function (data) {
+//		if (log3) console.log(data);
+//		if (log1) console.log("CURRENT info: " + data.get_info);
+//
+//	});
+//	Daemon.getHeight().then(function (data) {
+//		if (log3) console.log(data);
+//		if (log1) console.log("CURRENT Daemon height: " + data.get_height);
+//
+//	});
 
 }
 function getWalletInfo(callback) {
@@ -245,6 +245,12 @@ function checkCommand(msg) {
 
 				});
 				break;
+				case 'info':
+					getBalance(msg.author.id, msg, function (data) {
+						msg.author.send("Hey! Blockchain info " + formatDisplayBalance(data.get_info) + " " + coin_name + "!");
+
+					});
+					break;
 			case 'deposit':
 				getBalance(msg.author.id, msg, function (data) {
 					msg.author.send("Hey! For deposit into the tip bot, use address: " + server_wallet_address + " WITH payment ID " + data.paymentid + " . If PaymentID is missing, your deposit will be lost");
