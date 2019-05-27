@@ -3,10 +3,12 @@ var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
 var moneroWallet = require('arqma-nodejs');
+var arqmaDaemon = require('armad-nodejs')
 var Big = require('big.js');
 var config = require('./bot_config');
 
 var Wallet = new moneroWallet(config.wallethostname, config.walletport);
+var Daemon = new arqmaDaemon(config.daemonhostname, config.daemonport);
 
 var bot_token = config.bot_token;
 
@@ -39,7 +41,11 @@ function Initialize() {
 		if (log1) console.log("Stats for admins - current balance: " + balance.balance + " " + coin_name);
 	});
 
-	MongoClient.connect(url, function (err, dbobj) {
+	Daemon.height().then(function (height) {
+		if (log1) console.log("Stats for admins - current height: " + height.height + " " + coin_name);
+	});
+
+		MongoClient.connect(url, function (err, dbobj) {
 		if (err) throw err;
 		console.log("Database created, or already exists!");
 		var dbo = dbobj.db("arqmaBot");
