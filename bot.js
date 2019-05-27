@@ -8,6 +8,7 @@ var Big = require('big.js');
 var config = require('./bot_config');
 
 var Wallet = new moneroWallet(config.wallethostname, config.walletport);
+var Daemon = new arqmaDaemon(config.daemonhostname, config.daemontport);
 
 var bot_token = config.bot_token;
 
@@ -38,6 +39,9 @@ function Initialize() {
 
 	Wallet.balance().then(function (balance) {
 		if (log1) console.log("Stats for admins - current balance: " + balance.balance + " " + coin_name);
+	});
+	Daemon.get_info().then(function (get_info) {
+		if (log1) console.log("Stats for admins - info: " + get_info.get_info + " " + coin_name);
 	});
 
 		MongoClient.connect(url, function (err, dbobj) {
