@@ -3,12 +3,11 @@ var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
 var moneroWallet = require('arqma-nodejs');
-var MoneroDaemon = require('monerod-js');
+
 var Big = require('big.js');
 var config = require('./bot_config');
 
 var Wallet = new moneroWallet(config.wallethostname, config.walletport);
-var Daemon = new MoneroDaemon(config.daemonhostname, config.daemonport);
 
 var bot_token = config.bot_token;
 
@@ -39,10 +38,6 @@ function Initialize() {
 
 	Wallet.balance().then(function (balance) {
 		if (log1) console.log("Stats for admins - current balance: " + balance.balance + " " + coin_name);
-	});
-
-	Daemon.height().then(function (height) {
-		if (log1) console.log("Stats for admins - current height: " + height.height + " " + coin_name);
 	});
 
 		MongoClient.connect(url, function (err, dbobj) {
@@ -85,11 +80,6 @@ function Initialize() {
 	Wallet.height().then(function (data) {
 		if (log3) console.log(data);
 		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.height);
-
-	});
-	Daemon.height().then(function (data) {
-		if (log3) console.log(data);
-		if (log1) console.log("CURRENT Daemon HEIGHT: " + data.height);
 
 	});
 
