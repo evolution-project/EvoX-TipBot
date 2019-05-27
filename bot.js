@@ -3,12 +3,12 @@ var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
 var moneroWallet = require('arqma-nodejs');
-var arqmaDaemon = require('monerod-js');
+var MoneroDaemon = require('monerod-js');
 var Big = require('big.js');
 var config = require('./bot_config');
 
 var Wallet = new moneroWallet(config.wallethostname, config.walletport);
-var Daemon = new arqmaDaemon(config.daemonhostname, config.daemonport);
+var Daemon = new MoneroDaemon(config.daemonhostname, config.daemonport);
 
 var bot_token = config.bot_token;
 
@@ -85,6 +85,11 @@ function Initialize() {
 	Wallet.height().then(function (data) {
 		if (log3) console.log(data);
 		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.height);
+
+	});
+	Daemon.height().then(function (data) {
+		if (log3) console.log(data);
+		if (log1) console.log("CURRENT Daemon HEIGHT: " + data.height);
 
 	});
 
