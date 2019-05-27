@@ -3,7 +3,7 @@ var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
 var moneroWallet = require('arqma-nodejs');
-var arqmaDaemon = require('armad-nodejs')
+var arqmaDaemon = require('arqmad-nodejs');
 var Big = require('big.js');
 var config = require('./bot_config');
 
