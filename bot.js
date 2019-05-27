@@ -90,6 +90,11 @@ function Initialize() {
 		if (log1) console.log("CURRENT info: " + data.get_info);
 
 	});
+	Daemon.getHeight().then(function (data) {
+		if (log3) console.log(data);
+		if (log1) console.log("CURRENT Daemon height: " + data.get_height);
+
+	});
 
 }
 function getWalletInfo(callback) {
