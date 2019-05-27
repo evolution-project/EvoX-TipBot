@@ -41,9 +41,7 @@ function Initialize() {
 	Wallet.balance().then(function (balance) {
 		if (log1) console.log("Stats for admins - current balance: " + balance.balance + " " + coin_name);
 	});
-	Daemon.get_info().then(function (get_info) {
-		if (log1) console.log("Stats for admins - info: " + get_info.get_info + " " + coin_name);
-	});
+
 
 		MongoClient.connect(url, function (err, dbobj) {
 		if (err) throw err;
