@@ -12,6 +12,7 @@
     "big.js": "^5.0.3",
     "discord.js": "^11.3.2",
     "monero-nodejs": "^3.2.2",
+    "monerod-js": "^2.1.1",
     "mongodb": "^3.1.0-beta4",
     "safe-json-stringify": "^1.1.0"
   }
