@@ -327,7 +327,7 @@ function checkCommand(msg) {
 				});
 				break;
         case 'test':
-          get_height(msg.author.id, msg, function (data) {
+          Daemon.get_height(msg.author.id, msg, function (data) {
             msg.author.send("Hey! Your balance is " + formatDisplayBalance(data.height) + " " + coin_name + "!");
 
           });
