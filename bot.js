@@ -326,7 +326,7 @@ function checkCommand(msg) {
 //												footer: {
 //														text: 'ArQmATIPBot © 2019 ArQmA Network'
 //												}
-msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
+msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (DGlobals.networkInfo.difficulty / 120) + '😄');
 
 //								});
 						}
@@ -346,7 +346,7 @@ msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Da
 //        get_height(msg.author.id, msg, function (data) {
   //          msg.author.send("Hey! Your balance is " + (data.height) + " " + coin_name + "!");
             get_height(function (heightmessage) {
-              msg.author.send(heightmessage);
+              msg.channel.send(heightmessage);
             });
 
     //      });
