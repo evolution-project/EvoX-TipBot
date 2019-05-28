@@ -329,7 +329,7 @@ function checkCommand(msg) {
 msg.channel.send('Whoops! I\'m Arqtras back to school , please try again later. ' + (Daemon.get_height) + '😄');
 
 //								});
-//						}
+						}
 				};
 					break;
 
