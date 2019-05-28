@@ -158,6 +158,18 @@ function getWalletInfo(callback) {
 		});
 	} catch (error) { callback(error); }
 }
+function get_height(callback) {
+	try {
+		Daemon.height().then(function (data) {
+
+
+				callback("Current daemon height is: " + data.height +  );
+
+			});
+
+
+	} catch (error) { callback(error); }
+}
 function getBlockInfo(callback) {
 	try {
 		Wallet.height().then(function (data) {
@@ -327,7 +339,7 @@ function checkCommand(msg) {
 				});
 				break;
         case 'test':
-          Daemon.get_height(msg.author.id, msg, function (data) {
+        get_height(msg.author.id, msg, function (data) {
             msg.author.send("Hey! Your balance is " + formatDisplayBalance(data.height) + " " + coin_name + "!");
 
           });
