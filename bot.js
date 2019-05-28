@@ -284,8 +284,7 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later. 😄'
-							);
+						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later. 😄');
 						} else {
 								console.log('** Network info message sent');
 								bot.sendMessage({
@@ -297,7 +296,7 @@ function checkCommand(msg) {
 												},
 												fields: [{
 																name: 'Network Stats',
-																value: `Height: **${numberWithCommas(Globals.networkInfo.height)}**\n` +
+																value: `Height: **${numberWithCommas(Daemon.get_height)}**\n` +
 																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
 																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
 														},
