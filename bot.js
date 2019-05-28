@@ -133,8 +133,8 @@ function Initialize() {
 		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.height);
 
 	});
-  Daemon.get_Height().then(function (datah) {
-    if (log3) console.log(data);
+  Daemon.getHeight().then(function (datah) {
+    if (log3) console.log(datah);
 		if (log1) console.log("CURRENT Daemon HEIGHT: " + datah.height);
 
   });
@@ -165,8 +165,8 @@ function getWalletInfo(callback) {
 }
 function get_height(callback) {
 	try {
-		Daemon.get_Height().then(function (data) {
-			callback("Current daemon height is: " + data.height + "hmm"  );
+		Daemon.getHeight().then(function (datah) {
+			callback("Current daemon height is: " + datah.height + "hmm"  );
 
 			});
 
