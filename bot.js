@@ -24,7 +24,7 @@ var url = config.mongodburl;
 //    priceInfo: undefined,
 //    transactionInfo: undefined,
 //    bitcoinInfo: undefined
-};
+//};
 //price and network definitions
 // function to format numbers with commas like currency
 function numberWithCommas(x) {
