@@ -299,7 +299,7 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
+						  	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Globals.networkInfo.difficulty / 120) + ' <- to do 😄');
 						} else {
 								console.log('** Network info message sent');
 //								bot.sendMessage({
@@ -326,7 +326,7 @@ function checkCommand(msg) {
 //												footer: {
 //														text: 'ArQmATIPBot © 2019 ArQmA Network'
 //												}
-msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (DGlobals.networkInfo.difficulty / 120) + '😄');
+msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
 
 //								});
 						}
