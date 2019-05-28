@@ -314,7 +314,7 @@ function checkCommand(msg) {
 //																value: `Height: **${numberWithCommas(Daemon.height)}**\n` +
 //																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
 //																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
-														},
+//														},
 												//    {
 													//      name: 'Coin Movement',
 														//    value: `TX in Mempool: **${Globals.transactionInfo.length}**\n` +
