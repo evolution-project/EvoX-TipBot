@@ -246,7 +246,7 @@ function checkCommand(msg) {
 						  //	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
 					//	} else {
 								console.log('** Network info message sent');
-                msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (data.height) + '😄');
+                msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + get_height(data.height) + '😄');
 
 				//		}
 				//};
