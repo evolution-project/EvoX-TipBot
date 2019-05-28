@@ -18,53 +18,7 @@ bot.login(bot_token);
 
 var MongoClient = require('mongodb').MongoClient;
 var url = config.mongodburl;
-//price and network
-const Globals = {
-    networkInfo: undefined,
-    priceInfo: undefined,
-    transactionInfo: undefined,
-    bitcoinInfo: undefined
-};
-//price and network definitions
-// function to format numbers with commas like currency
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
 
-// async block
-async function update() {
-    let networkQuery = await getData('https://api.arqma.com/pool_api/stats', 'networkQuery');
-    if (networkQuery !== undefined) {
-        Globals.networkInfo = networkQuery;
-    } else {
-        console.log('** Got undefined block header data from cache api')
-    }
-    let priceQuery = await getData('http://cratex.io/api/v1/get_markets.php?market=LCX/BTC', 'priceInfo');
-    if (priceQuery !== undefined) {
-        Globals.priceInfo = JSON.parse(priceQuery.trim());
-    } else {
-        console.log('** Got undefined price data from exchange')
-    }
-    let transactionQuery = await getData('https://blockapi.aeonclassic.org/transaction/pool', 'priceInfo');
-    if (transactionQuery !== undefined) {
-        Globals.transactionInfo = transactionQuery;
-    } else {
-        console.log('** Got undefined transaction pool data from cache api')
-    }
-    let bitcoinQuery = (await getData('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false', 'geckoBTCInfo'))[0];
-    if (bitcoinQuery !== undefined) {
-        Globals.bitcoinInfo = bitcoinQuery;
-    } else {
-        console.log('** Got undefined bitcoin price data from coingecko');
-    }
-}
-
-
-// refreshes variables every 5s
-async function init() {
-    await update();
-    setInterval(update, 5000);
-}
 
 Initialize();
 
@@ -138,16 +92,6 @@ function Initialize() {
 		if (log1) console.log("CURRENT Daemon HEIGHT: " + data.height);
 
   });
-//	Daemon.getInfo().then(function (data) {
-//		if (log3) console.log(data);
-//		if (log1) console.log("CURRENT info: " + data.get_info);
-//
-//	});
-//	Daemon.getHeight().then(function (data) {
-//		if (log3) console.log(data);
-//		if (log1) console.log("CURRENT Daemon height: " + data.get_height);
-//
-//	});
 
 }
 function getWalletInfo(callback) {
@@ -302,33 +246,8 @@ function checkCommand(msg) {
 						  	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
 						} else {
 								console.log('** Network info message sent');
-//								bot.sendMessage({
-//										to: 367991107511910430,
-//										embed: {
-//												color: 3066993,
-//												thumbnail: {
-//														url: 'https://raw.githubusercontent.com/arqma/arqma-logo/master/ico%20sizes/android-icon-48x48.png',
-//												},
-//												fields: [{
-//																name: 'Network Stats',
-//																value: `Height: **${numberWithCommas(Daemon.height)}**\n` +
-//																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
-//																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
-//														},
-												//    {
-													//      name: 'Coin Movement',
-														//    value: `TX in Mempool: **${Globals.transactionInfo.length}**\n` +
-															//      `TX/Block: **${(Globals.networkInfo.alreadyGeneratedTransactions / Globals.networkInfo.height).toFixed(2)}**\n` +
-																//    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
+                msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
 
-														//}
-//												],
-//												footer: {
-//														text: 'ArQmATIPBot © 2019 ArQmA Network'
-//												}
-msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
-
-//								});
 						}
 				};
 					break;
@@ -343,13 +262,9 @@ msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Da
 				});
 				break;
         case 'test':
-//        get_height(msg.author.id, msg, function (data) {
-  //          msg.author.send("Hey! Your balance is " + (data.height) + " " + coin_name + "!");
             get_height(function (heightmessage) {
               msg.channel.send(heightmessage);
             });
-
-    //      });
           break;
 
 			case 'balance':
