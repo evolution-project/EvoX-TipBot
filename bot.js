@@ -299,7 +299,7 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later. ' + (Daemon.get_height) + '😄');
+						  	msg.channel.send('Whoops! I\'m  ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
 						} else {
 								console.log('** Network info message sent');
 //								bot.sendMessage({
@@ -326,7 +326,7 @@ function checkCommand(msg) {
 //												footer: {
 //														text: 'ArQmATIPBot © 2019 ArQmA Network'
 //												}
-msg.channel.send('Whoops! I\'m Arqtras back to school , please try again later. ' + (Daemon.get_height) + '😄');
+msg.channel.send('Whoops! I\'m Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
 
 //								});
 						}
@@ -344,7 +344,7 @@ msg.channel.send('Whoops! I\'m Arqtras back to school , please try again later. 
 				break;
         case 'test':
         get_height(msg.author.id, msg, function (data) {
-            msg.author.send("Hey! Your balance is " + formatDisplayBalance(data.height) + " " + coin_name + "!");
+            msg.author.send("Hey! Your balance is " + (data.height) + " " + coin_name + "!");
 
           });
           break;
