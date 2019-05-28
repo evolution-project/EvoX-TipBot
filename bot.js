@@ -238,18 +238,10 @@ function checkCommand(msg) {
 				break;
 
 				// network command
-				case 'network': //{
-						// check that none of the variables are undefined
-				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
-					//		if (Globals.networkInfo === undefined) {
-						//    console.log('** Undefined network info requested');
-						  //	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
-					//	} else {
+				case 'network':
 								console.log('** Network info message sent');
-                msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.getHeight) + '😄');
+                msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.height) + '😄');
 
-				//		}
-				//};
 					break;
 
 			case 'help':
