@@ -284,7 +284,7 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later.'  Daemon.get_height '😄');
+						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later.' + (Daemon.get_height) + '😄');
 						} else {
 								console.log('** Network info message sent');
 								bot.sendMessage({
