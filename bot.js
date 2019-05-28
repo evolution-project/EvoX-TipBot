@@ -282,14 +282,12 @@ function checkCommand(msg) {
             // check that none of the variables are undefined
             if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
                 console.log('** Undefined network info requested');
-                bot.sendMessage({
-                    to: channelID,
-                    message: 'Whoops! I\'m still gathering data for you, please try again later. 😄'
+              	msg.author.send('Whoops! I\'m still gathering data for you, please try again later. 😄');
                 });
             } else {
                 console.log('** Network info message sent');
                 bot.sendMessage({
-                    to: channelID,
+                    to: 367991107511910430,
                     embed: {
                         color: 3066993,
                         thumbnail: {
