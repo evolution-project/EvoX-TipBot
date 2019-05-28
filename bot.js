@@ -19,12 +19,12 @@ bot.login(bot_token);
 var MongoClient = require('mongodb').MongoClient;
 var url = config.mongodburl;
 //price and network
-const Globals = {
-    networkInfo: undefined,
-    priceInfo: undefined,
-    transactionInfo: undefined,
-    bitcoinInfo: undefined
-};
+//const Globals = {
+//    networkInfo: undefined,
+//    priceInfo: undefined,
+//    transactionInfo: undefined,
+//    bitcoinInfo: undefined
+//};
 //price and network definitions
 // function to format numbers with commas like currency
 function numberWithCommas(x) {
