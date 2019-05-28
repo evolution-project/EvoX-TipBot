@@ -163,16 +163,16 @@ function getWalletInfo(callback) {
 		});
 	} catch (error) { callback(error); }
 }
-function get_height(callback) {
-	try {
-		Daemon.getHeight().then(function (data) {
-			callback("Current daemon height is: " + data.height + "hmm"  );
+//function get_height(callback) {
+//	try {
+//		Daemon.getHeight().then(function (data) {
+//			callback("Current daemon height is: " + data.height + "hmm"  );
+//
+//			});
 
-			});
 
-
-	} catch (error) { callback(error); }
-}
+//	} catch (error) { callback(error); }
+//}
 function getBlockInfo(callback) {
 	try {
 		Wallet.height().then(function (data) {
@@ -299,7 +299,7 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! I\'m  ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
+						  	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
 						} else {
 								console.log('** Network info message sent');
 //								bot.sendMessage({
@@ -326,7 +326,7 @@ function checkCommand(msg) {
 //												footer: {
 //														text: 'ArQmATIPBot © 2019 ArQmA Network'
 //												}
-msg.channel.send('Whoops! I\'m Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
+msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
 
 //								});
 						}
