@@ -166,7 +166,7 @@ function getWalletInfo(callback) {
 function get_height(callback) {
 	try {
 		Daemon.getHeight().then(function (data) {
-			callback("Daemon height is: " + data.height + "hmm"  );
+			callback("Daemon height is: " + data.height + " hmm"  );
 
 			});
 
@@ -299,7 +299,7 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Globals.networkInfo.difficulty / 120) + ' <- to do 😄');
+						  	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
 						} else {
 								console.log('** Network info message sent');
 //								bot.sendMessage({
