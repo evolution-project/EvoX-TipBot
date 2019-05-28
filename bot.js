@@ -160,10 +160,8 @@ function getWalletInfo(callback) {
 }
 function get_height(callback) {
 	try {
-		Daemon.height().then(function (data) {
-
-
-				callback("Current daemon height is: " + data.height + "hmm"  );
+		Daemon.height().then(function (data1) {
+			callback("Current daemon height is: " + data1.height + "hmm"  );
 
 			});
 
