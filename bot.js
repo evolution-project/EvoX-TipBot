@@ -281,10 +281,10 @@ function checkCommand(msg) {
       case 'network': {
             // check that none of the variables are undefined
             if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
-                console.log('** Undefined network info requested');
-              	msg.author.send('Whoops! I\'m still gathering data for you, please try again later. 😄'
-							);
-            } else {
+            //    console.log('** Undefined network info requested');
+            //  	msg.author.send('Whoops! I\'m still gathering data for you, please try again later. 😄'
+						//	);
+            //} else {
                 console.log('** Network info message sent');
                 bot.sendMessage({
                     to: 367991107511910430,
@@ -313,7 +313,7 @@ function checkCommand(msg) {
                     }
                 });
             }
-}
+};
 					break;
 			case 'help':
 				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"!tiparq blockheight\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
