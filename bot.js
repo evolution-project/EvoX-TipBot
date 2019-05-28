@@ -17,6 +17,52 @@ bot.login(bot_token);
 
 var MongoClient = require('mongodb').MongoClient;
 var url = config.mongodburl;
+//price and network
+const Globals = {
+    networkInfo: undefined,
+    priceInfo: undefined,
+    transactionInfo: undefined,
+    bitcoinInfo: undefined
+};
+//price and network definitions
+// function to format numbers with commas like currency
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// async block
+async function update() {
+    let networkQuery = await getData('https://blockexplorer.arqma.com/api/networkinfo', 'networkQuery');
+    if (networkQuery !== undefined) {
+        Globals.networkInfo = networkQuery;
+    } else {
+        console.log('** Got undefined block header data from cache api')
+    }
+    let priceQuery = await getData('http://cratex.io/api/v1/get_markets.php?market=LCX/BTC', 'priceInfo');
+    if (priceQuery !== undefined) {
+        Globals.priceInfo = JSON.parse(priceQuery.trim());
+    } else {
+        console.log('** Got undefined price data from exchange')
+    }
+    let transactionQuery = await getData('https://blockapi.aeonclassic.org/transaction/pool', 'priceInfo');
+    if (transactionQuery !== undefined) {
+        Globals.transactionInfo = transactionQuery;
+    } else {
+        console.log('** Got undefined transaction pool data from cache api')
+    }
+    let bitcoinQuery = (await getData('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false', 'geckoBTCInfo'))[0];
+    if (bitcoinQuery !== undefined) {
+        Globals.bitcoinInfo = bitcoinQuery;
+    } else {
+        console.log('** Got undefined bitcoin price data from coingecko');
+    }
+}
+
+// refreshes variables every 5s
+async function init() {
+    await update();
+    setInterval(update, 5000);
+}
 
 Initialize();
 
@@ -229,6 +275,48 @@ function checkCommand(msg) {
 			case 'about':
 				msg.author.send("Hello! This is ArQmA TIP Bot version 0.1. \n Source based on Mojo-LB/CryptonoteTipBot repository :thumbsup: \n Code reworked by ArqTras for Arqma Network ");
 				break;
+
+
+        // network command
+      case 'network': {
+            // check that none of the variables are undefined
+            if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
+                console.log('** Undefined network info requested');
+                bot.sendMessage({
+                    to: channelID,
+                    message: 'Whoops! I\'m still gathering data for you, please try again later. 😄'
+                });
+            } else {
+                console.log('** Network info message sent');
+                bot.sendMessage({
+                    to: channelID,
+                    embed: {
+                        color: 3066993,
+                        thumbnail: {
+                            url: 'https://raw.githubusercontent.com/lcxnetwork/HashBot/master/img/lcxlogo.png',
+                        },
+                        fields: [{
+                                name: 'Network Stats',
+                                value: `Height: **${numberWithCommas(Globals.networkInfo.height)}**\n` +
+                                    `Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
+                                    `Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} LCX**\n`
+                            },
+                            {
+                                name: 'Coin Movement',
+                                value: `TX in Mempool: **${Globals.transactionInfo.length}**\n` +
+                                    `TX/Block: **${(Globals.networkInfo.alreadyGeneratedTransactions / Globals.networkInfo.height).toFixed(2)}**\n` +
+                                    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
+
+                            }
+                        ],
+                        footer: {
+                            text: 'ArQmATIPBot © 2019 ArQmA Network'
+                        }
+                    }
+                });
+            }
+}
+					break;
 			case 'help':
 				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"!tiparq blockheight\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
