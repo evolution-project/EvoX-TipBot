@@ -33,7 +33,7 @@ function numberWithCommas(x) {
 
 // async block
 async function update() {
-    let networkQuery = await getData('http://blockapi.aeonclassic.org/block/header/top', 'networkQuery');
+    let networkQuery = await getData('https://api.arqma.com/pool_api/stats', 'networkQuery');
     if (networkQuery !== undefined) {
         Globals.networkInfo = networkQuery;
     } else {
