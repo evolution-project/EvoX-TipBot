@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const discord = require('discord.io');
 const request = require('request-promise');
 var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
