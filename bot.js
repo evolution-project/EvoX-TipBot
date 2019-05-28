@@ -299,21 +299,21 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later.' + (Daemon.get_height) + '😄');
+						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later. ' + (Daemon.get_height) + '😄');
 						} else {
 								console.log('** Network info message sent');
-								bot.sendMessage({
-										to: 367991107511910430,
-										embed: {
-												color: 3066993,
-												thumbnail: {
-														url: 'https://raw.githubusercontent.com/arqma/arqma-logo/master/ico%20sizes/android-icon-48x48.png',
-												},
-												fields: [{
-																name: 'Network Stats',
-																value: `Height: **${numberWithCommas(Daemon.height)}**\n` +
-																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
-																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
+//								bot.sendMessage({
+//										to: 367991107511910430,
+//										embed: {
+//												color: 3066993,
+//												thumbnail: {
+//														url: 'https://raw.githubusercontent.com/arqma/arqma-logo/master/ico%20sizes/android-icon-48x48.png',
+//												},
+//												fields: [{
+//																name: 'Network Stats',
+//																value: `Height: **${numberWithCommas(Daemon.height)}**\n` +
+//																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
+//																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
 														},
 												//    {
 													//      name: 'Coin Movement',
@@ -322,13 +322,14 @@ function checkCommand(msg) {
 																//    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
 
 														//}
-												],
-												footer: {
-														text: 'ArQmATIPBot © 2019 ArQmA Network'
-												}
-										}
-								});
-						}
+//												],
+//												footer: {
+//														text: 'ArQmATIPBot © 2019 ArQmA Network'
+//												}
+msg.channel.send('Whoops! I\'m Arqtras back to school , please try again later. ' + (Daemon.get_height) + '😄');
+
+//								});
+//						}
 				};
 					break;
 
