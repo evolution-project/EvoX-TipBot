@@ -163,16 +163,16 @@ function getWalletInfo(callback) {
 		});
 	} catch (error) { callback(error); }
 }
-//function get_height(callback) {
-//	try {
-//		Daemon.getHeight().then(function (data) {
-//			callback("Current daemon height is: " + data.height + "hmm"  );
-//
-//			});
+function get_height(callback) {
+	try {
+		Daemon.getHeight().then(function (data) {
+			callback("Daemon height is: " + data.height + "hmm"  );
+
+			});
 
 
-//	} catch (error) { callback(error); }
-//}
+	} catch (error) { callback(error); }
+}
 function getBlockInfo(callback) {
 	try {
 		Wallet.height().then(function (data) {
@@ -343,10 +343,13 @@ msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Da
 				});
 				break;
         case 'test':
-        get_height(msg.author.id, msg, function (data) {
-            msg.author.send("Hey! Your balance is " + (data.height) + " " + coin_name + "!");
+//        get_height(msg.author.id, msg, function (data) {
+  //          msg.author.send("Hey! Your balance is " + (data.height) + " " + coin_name + "!");
+            get_height(function (heightmessage) {
+              msg.author.send(heightmessage);
+            });
 
-          });
+    //      });
           break;
 
 			case 'balance':
