@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const request = require('request-promise');
 var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
@@ -299,13 +300,13 @@ function checkCommand(msg) {
                                     `Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
                                     `Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} LCX**\n`
                             },
-                            {
-                                name: 'Coin Movement',
-                                value: `TX in Mempool: **${Globals.transactionInfo.length}**\n` +
-                                    `TX/Block: **${(Globals.networkInfo.alreadyGeneratedTransactions / Globals.networkInfo.height).toFixed(2)}**\n` +
-                                    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
+                        //    {
+                          //      name: 'Coin Movement',
+                            //    value: `TX in Mempool: **${Globals.transactionInfo.length}**\n` +
+                              //      `TX/Block: **${(Globals.networkInfo.alreadyGeneratedTransactions / Globals.networkInfo.height).toFixed(2)}**\n` +
+                                //    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
 
-                            }
+                            //}
                         ],
                         footer: {
                             text: 'ArQmATIPBot © 2019 ArQmA Network'
