@@ -284,7 +284,7 @@ function checkCommand(msg) {
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
 							if (Globals.networkInfo === undefined) {
 						    console.log('** Undefined network info requested');
-						  	msg.author.send('Whoops! I\'m still gathering data for you, please try again later. 😄'
+						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later. 😄'
 							);
 						} else {
 								console.log('** Network info message sent');
@@ -293,7 +293,7 @@ function checkCommand(msg) {
 										embed: {
 												color: 3066993,
 												thumbnail: {
-														url: 'https://raw.githubusercontent.com/lcxnetwork/HashBot/master/img/lcxlogo.png',
+														url: 'https://raw.githubusercontent.com/arqma/arqma-logo/master/ico%20sizes/android-icon-48x48.png',
 												},
 												fields: [{
 																name: 'Network Stats',
