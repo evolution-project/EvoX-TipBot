@@ -288,18 +288,19 @@ function checkCommand(msg) {
 							);
 						} else {
 								console.log('** Network info message sent');
-								bot.sendMessage({
-										to: 367991107511910430,
-										embed: {
-												color: 3066993,
-												thumbnail: {
-														url: 'https://raw.githubusercontent.com/arqma/arqma-logo/master/ico%20sizes/android-icon-48x48.png',
-												},
-												fields: [{
-																name: 'Network Stats',
-																value: `Height: **${numberWithCommas(Globals.networkInfo.height)}**\n` +
-																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
-																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
+msg.channel.send(Height: **${numberWithCommas(Globals.networkInfo.height)}**\n);
+								//bot.sendMessage({
+									//	to: 367991107511910430,
+										//embed: {
+											//	color: 3066993,
+												//thumbnail: {
+													//	url: 'https://raw.githubusercontent.com/arqma/arqma-logo/master/ico%20sizes/android-icon-48x48.png',
+											//	},
+												//fields: [{
+													//			name: 'Network Stats',
+												//				value: `Height: **${numberWithCommas(Globals.networkInfo.height)}**\n` +
+													//					`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
+														//				`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
 														},
 												//    {
 													//      name: 'Coin Movement',
@@ -308,14 +309,14 @@ function checkCommand(msg) {
 																//    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
 
 														//}
-												],
-												footer: {
-														text: 'ArQmATIPBot © 2019 ArQmA Network'
-												}
-										}
-								});
-						}
-				};
+												//],
+											//	footer: {
+												//		text: 'ArQmATIPBot © 2019 ArQmA Network'
+												//}
+										//}
+								//});
+					//	}
+				//};
 					break;
 
 			case 'help':
