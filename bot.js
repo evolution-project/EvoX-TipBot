@@ -163,7 +163,7 @@ function get_height(callback) {
 		Daemon.height().then(function (data) {
 
 
-				callback("Current daemon height is: " + data.height +  );
+				callback("Current daemon height is: " + data.height + "hmm"  );
 
 			});
 
