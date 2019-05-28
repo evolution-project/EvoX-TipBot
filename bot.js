@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const discord = require('discord.io');
 const request = require('request-promise');
 var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
@@ -33,7 +34,7 @@ function numberWithCommas(x) {
 
 // async block
 async function update() {
-    let networkQuery = await getData('https://blockexplorer.arqma.com/api/networkinfo', 'networkQuery');
+    let networkQuery = await getData('http://blockapi.aeonclassic.org/block/header/top', 'networkQuery');
     if (networkQuery !== undefined) {
         Globals.networkInfo = networkQuery;
     } else {
@@ -298,7 +299,7 @@ function checkCommand(msg) {
                                 name: 'Network Stats',
                                 value: `Height: **${numberWithCommas(Globals.networkInfo.height)}**\n` +
                                     `Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
-                                    `Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} LCX**\n`
+                                    `Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
                             },
                         //    {
                           //      name: 'Coin Movement',
