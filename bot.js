@@ -165,8 +165,8 @@ function getWalletInfo(callback) {
 }
 function get_height(callback) {
 	try {
-		Daemon.height().then(function (data1) {
-			callback("Current daemon height is: " + data1.height + "hmm"  );
+		Daemon.get_Height().then(function (data) {
+			callback("Current daemon height is: " + data.height + "hmm"  );
 
 			});
 
@@ -311,7 +311,7 @@ function checkCommand(msg) {
 												},
 												fields: [{
 																name: 'Network Stats',
-																value: `Height: **${numberWithCommas(Daemon.get_height)}**\n` +
+																value: `Height: **${numberWithCommas(Daemon.height)}**\n` +
 																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
 																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
 														},
