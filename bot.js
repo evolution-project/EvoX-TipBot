@@ -24,7 +24,7 @@ var url = config.mongodburl;
 //    priceInfo: undefined,
 //    transactionInfo: undefined,
 //    bitcoinInfo: undefined
-//};
+};
 //price and network definitions
 // function to format numbers with commas like currency
 function numberWithCommas(x) {
@@ -297,10 +297,10 @@ function checkCommand(msg) {
 				case 'network': {
 						// check that none of the variables are undefined
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
-		//					if (Globals.networkInfo === undefined) {
-			//			    console.log('** Undefined network info requested');
-				//		  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later.' + (Daemon.get_height) + '😄');
-					//	} else {
+							if (Globals.networkInfo === undefined) {
+						    console.log('** Undefined network info requested');
+						  	msg.channel.send('Whoops! I\'m still gathering data for you, please try again later.' + (Daemon.getHeight) + '😄');
+						} else {
 								console.log('** Network info message sent');
 								bot.sendMessage({
 										to: 367991107511910430,
@@ -328,7 +328,7 @@ function checkCommand(msg) {
 												}
 										}
 								});
-						//}
+						}
 				};
 					break;
 
