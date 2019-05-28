@@ -58,44 +58,7 @@ async function update() {
         console.log('** Got undefined bitcoin price data from coingecko');
     }
 }
-// network command
-case 'network': {
-		// check that none of the variables are undefined
-		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
-		//    console.log('** Undefined network info requested');
-		//  	msg.author.send('Whoops! I\'m still gathering data for you, please try again later. 😄'
-		//	);
-		//} else {
-				console.log('** Network info message sent');
-				bot.sendMessage({
-						to: 367991107511910430,
-						embed: {
-								color: 3066993,
-								thumbnail: {
-										url: 'https://raw.githubusercontent.com/lcxnetwork/HashBot/master/img/lcxlogo.png',
-								},
-								fields: [{
-												name: 'Network Stats',
-												value: `Height: **${numberWithCommas(Globals.networkInfo.height)}**\n` +
-														`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
-														`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
-										},
-								//    {
-									//      name: 'Coin Movement',
-										//    value: `TX in Mempool: **${Globals.transactionInfo.length}**\n` +
-											//      `TX/Block: **${(Globals.networkInfo.alreadyGeneratedTransactions / Globals.networkInfo.height).toFixed(2)}**\n` +
-												//    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
 
-										//}
-								],
-								footer: {
-										text: 'ArQmATIPBot © 2019 ArQmA Network'
-								}
-						}
-				});
-		}
-};
-	break;
 
 // refreshes variables every 5s
 async function init() {
@@ -315,7 +278,45 @@ function checkCommand(msg) {
 				msg.author.send("Hello! This is ArQmA TIP Bot version 0.1. \n Source based on Mojo-LB/CryptonoteTipBot repository :thumbsup: \n Code reworked by ArqTras for Arqma Network ");
 				break;
 
+				// network command
+				case 'network': {
+						// check that none of the variables are undefined
+				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
+							if (Globals.networkInfo === undefined) {
+						//    console.log('** Undefined network info requested');
+						//  	msg.author.send('Whoops! I\'m still gathering data for you, please try again later. 😄'
+						//	);
+						//} else {
+								console.log('** Network info message sent');
+								bot.sendMessage({
+										to: 367991107511910430,
+										embed: {
+												color: 3066993,
+												thumbnail: {
+														url: 'https://raw.githubusercontent.com/lcxnetwork/HashBot/master/img/lcxlogo.png',
+												},
+												fields: [{
+																name: 'Network Stats',
+																value: `Height: **${numberWithCommas(Globals.networkInfo.height)}**\n` +
+																		`Network Hashrate: **${numberWithCommas(((Globals.networkInfo.difficulty / 120) / 1000).toFixed(2))} KH/s**\n` +
+																		`Block Reward: **${(Globals.networkInfo.reward / 100000000).toFixed(2)} ARQ**\n`
+														},
+												//    {
+													//      name: 'Coin Movement',
+														//    value: `TX in Mempool: **${Globals.transactionInfo.length}**\n` +
+															//      `TX/Block: **${(Globals.networkInfo.alreadyGeneratedTransactions / Globals.networkInfo.height).toFixed(2)}**\n` +
+																//    `Total Transactions: **${numberWithCommas(Globals.networkInfo.alreadyGeneratedTransactions)}**`
 
+														//}
+												],
+												footer: {
+														text: 'ArQmATIPBot © 2019 ArQmA Network'
+												}
+										}
+								});
+						}
+				};
+					break;
 
 			case 'help':
 				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"!tiparq blockheight\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
