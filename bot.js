@@ -238,18 +238,18 @@ function checkCommand(msg) {
 				break;
 
 				// network command
-				case 'network': {
+				case 'network': //{
 						// check that none of the variables are undefined
 				//		if (Globals.networkInfo === undefined || Globals.transactionInfo === undefined) {
-							if (Globals.networkInfo === undefined) {
-						    console.log('** Undefined network info requested');
-						  	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
-						} else {
+					//		if (Globals.networkInfo === undefined) {
+						//    console.log('** Undefined network info requested');
+						  //	msg.channel.send('Whoops! ArqTras go back to school, please try again later. ' + (Daemon.get_height) + ' <- to do 😄');
+					//	} else {
 								console.log('** Network info message sent');
                 msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.get_height) + '😄');
 
-						}
-				};
+				//		}
+				//};
 					break;
 
 			case 'help':
@@ -261,7 +261,7 @@ function checkCommand(msg) {
 
 				});
 				break;
-        case 'test':
+      case 'test':
             get_height(function (heightmessage) {
               msg.channel.send(heightmessage);
             });
@@ -273,13 +273,8 @@ function checkCommand(msg) {
 
 				});
 				break;
-	///			case 'info':
-		//			getBalance(msg.author.id, msg, function (data) {
-			//			msg.author.send("Hey! Blockchain info " + formatDisplayBalance(data.get_info) + " " + coin_name + "!");
 
-				//	});
-					//break;
-			case 'deposit':
+  		case 'deposit':
 				getBalance(msg.author.id, msg, function (data) {
 					msg.author.send("Hey! For deposit into the tip bot, use address: " + server_wallet_address + " WITH payment ID " + data.paymentid + " . If PaymentID is missing, your deposit will be lost");
 				});
@@ -289,9 +284,7 @@ function checkCommand(msg) {
 				var amount = arguments[3];
 				var custom_message = "";
 
-
-
-				//checkCorrectArguments
+			//checkCorrectArguments
 				try {
 					Big(amount);
 				} catch (error) { msg.reply("Oops! Invalid syntax"); return; }
@@ -319,7 +312,7 @@ function checkCommand(msg) {
 					msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
 				}
 				break;
-				case 'blockheight':
+			case 'blockheight':
 				getBlockInfo(function (walletmessage) {
 					msg.channel.send(walletmessage);
 				});
@@ -582,12 +575,6 @@ function removeAdmin(authorId, targetId, callback) {
 		addGeneralEvent("Removed admin with user id " + targetId, authorId); // log the action
 
 	});
-
-
-
-
-
-
 
 }
 
