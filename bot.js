@@ -311,7 +311,7 @@ function checkCommand(msg) {
 				break;
 			case 'withdraw':
 				try {
-					if (Big(arguments[3]) < Big(withdraw_min_amount)) {
+					if (Big(arguments[3]).lt(Big(withdraw_min_amount))) {
 						msg.author.send("Withdrawal error : Withdrawal amount is below minimum withdrawal amount"); return;
 					}
 				} catch (error) { msg.author.send("Syntax error"); return; }
@@ -592,7 +592,7 @@ function withDraw(authorId, walletaddress, w_amount, callback) {
 			if (log3) console.log("Function withdraw: minus: " + authorbalance.minus(wamount).toString());
 			var checkEnoughBalance = authorbalance.minus(wamount);
 			var withdrawAmountTxFeesCheck = Big(wamount).minus(Big(withdraw_tx_fees));
-			if (checkEnoughBalance >= 0 && withdrawAmountTxFeesCheck > 0) {
+			if (checkEnoughBalance.gte(Big(0)) && withdrawAmountTxFeesCheck.gt(Big(0))) {
 				wamount = wamount.minus(Big(withdraw_tx_fees));
 				if (log3) console.log("Function withdraw: withdraw amount (wamount) minus tx fees" + wamount.toString());
 				// wamount = getWalletFormatFromBigNumber(wamount); not required since getWalletFormatFromBigNumber ^
@@ -708,8 +708,8 @@ function TipSomebody(msg, authorId, tipTarget, tiptargetname, tipperauthorname, 
 					authorbalance = new Big(data.balance);
 					console.log(authorbalance);
 					console.log(transactionamount);
-					console.log(authorbalance >= transactionamount);
-					if (authorbalance >= transactionamount) {
+					console.log(authorbalance.gte(transactionamount));
+					if (authorbalance.gte(transactionamount)) {
 
 						var dbo = db.db("arqmaBot");
 						var myquery = { userid: authorId };
