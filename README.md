@@ -1,6 +1,6 @@
 # ArQmA TipBot
 
-Its completlty reowrked to use arqma-nodejs rpc calls.
+Its completlty reworked to use arqma-nodejs rpc calls.
 Soon will be udpated to use our new npm repository.
 ### Standard Requirements :
 ----------------------------------------------------------------------------
