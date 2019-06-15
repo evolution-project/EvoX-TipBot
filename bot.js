@@ -308,7 +308,7 @@ function checkCommand(msg) {
 				case 'beer':
 					var user = arguments[2];
 					var amount = 5;
-					var custom_message = "to have a good weekend beer";
+					var custom_message = "";
 
 				//checkCorrectArguments
 		//			try {
@@ -330,7 +330,7 @@ function checkCommand(msg) {
 					if (tiptarget != null) {
 						TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
 							if (success == true) {
-								msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :beer: by " + msg.author + custom_message);
+								msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + " to have a good weekend :beer: ");
 							} else { msg.channel.send(message); }
 
 						});
