@@ -304,6 +304,40 @@ function checkCommand(msg) {
 					msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
 				}
 				break;
+				//beer
+				case 'beer':
+					var user = arguments[2];
+					var amount = 5;
+					var custom_message = "to have a good weekend beer";
+
+				//checkCorrectArguments
+		//			try {
+		//				Big(amount);
+		//			} catch (error) { msg.reply("Oops! Invalid syntax"); return; }
+					//
+					if (user == null) { msg.reply("Oops! Invalid syntax"); return; }
+					if (amount == null) { msg.reply("Oops! Invalid syntax"); return; }
+
+
+					try { user = msg.mentions.users.first().username; } catch (error) { msg.reply("Oops! Invalid syntax"); return; } /// check to avoid bot crash
+
+					try { custom_message = getCustomMessageFromTipCommand(arguments); } catch (err) { msg.reply("Oops! Something happened"); return; }
+
+
+					var tiptarget = msg.mentions.users.first().id;
+
+					var myname = msg.author.username;
+					if (tiptarget != null) {
+						TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
+							if (success == true) {
+								msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :beer: by " + msg.author + custom_message);
+							} else { msg.channel.send(message); }
+
+						});
+					} else {
+						msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
+					}
+					break;
 			case 'blockheight':
 				getBlockInfo(function (walletmessage) {
 					msg.channel.send(walletmessage);
