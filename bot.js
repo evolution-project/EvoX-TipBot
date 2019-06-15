@@ -245,7 +245,7 @@ function checkCommand(msg) {
 					break;
 
 			case 'help':
-				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq beer\" \n To send someone 5 ARQ for beer \"!tiparq mybalance\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"!tiparq blockheight\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
+				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n To send someone 5 ARQ for a beer \"!tiparq beer\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"!tiparq blockheight\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
 			case 'mybalance':
 				getBalance(msg.author.id, msg, function (data) {
