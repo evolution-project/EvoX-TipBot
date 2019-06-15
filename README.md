@@ -1,13 +1,8 @@
-# Dero TipBot
+# ArQmA TipBot
 
-### This Should work with Monero, and any fork that uses 12-decimals
-
-If you like to adjust to other forks that don't use 12-decimals, please change decimal value in `node-mdules/xmr-nodejs` or create a new module for your prefered coin
-
-Or even better, adjust to have it a configurable option and create a PR :)
-
-
-### Standard Requirements : 
+Its completlty reowrked to use arqma-nodejs rpc calls.
+Soon will be udpated to use our new npm repository.
+### Standard Requirements :
 ----------------------------------------------------------------------------
 Mongodb version 3.6.4 (compatible), other version use is not recommended, but it can work
 ```sudo apt install mongodb```
