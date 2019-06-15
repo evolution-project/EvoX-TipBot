@@ -1,10 +1,10 @@
-module.exports = {
+module.exports = { 
 
 wallethostname: "127.0.0.1",
-walletport : 59999,
 daemonhostname: "127.0.0.1",
-daemonport: 19994,
-bot_token : "",
+daemonport : 19994,
+walletport : 59999,
+bot_token : "NTc4NTI3MTAzMTE3NDI2Njg4.XORQwg.5XrfYKgsbrm5xw2Bl0u2sa6v_jQ",
 mongodburl: "mongodb://127.0.0.1:27017/arqmaBot",
 
 owner_id : "367991107511910430",
