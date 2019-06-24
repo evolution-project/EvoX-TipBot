@@ -867,7 +867,6 @@ function UpdateBalanceForUser(g_userid, callback) {
 
 						if (log3) console.log("Previous user balance: " + userobject.balance);
 						if (log3) console.log("New user balance after checking deposits: " + newbalance.toString());
-						msg.author.send("Hey! Your balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!");
 						if (log3) console.log("Last user deposit check height: " + lastcheckheight);
 
 						if(bPaymentFound) {
