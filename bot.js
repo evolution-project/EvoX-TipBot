@@ -295,7 +295,7 @@ function checkCommand(msg) {
 					TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
 						if (success == true) {
 							msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
-							msg.author.user.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
+							msg.user.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
 						} else { msg.channel.send(message); }
 
 					});
