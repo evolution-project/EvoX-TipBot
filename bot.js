@@ -297,7 +297,7 @@ function checkCommand(msg) {
 							msg.author.send("<@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + custom_message +  "Your balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!");
 						} else { msg.channel.send(message); }
 
-					})};
+					})});
 				} else {
 					msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
 				}
