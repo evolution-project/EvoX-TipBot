@@ -289,7 +289,7 @@ function checkCommand(msg) {
 				var tiptarget = msg.mentions.users.first().id;
 
 				var myname = msg.author.username;
-				var tiptarget = msg.client.username;
+				var user = msg.client.username;
 
 				if (tiptarget != null) {
 					TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
