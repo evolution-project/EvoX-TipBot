@@ -294,7 +294,7 @@ function checkCommand(msg) {
 					TipSomebody(msg, msg.author.id,  tiptarget, user, myname, amount, function (success, message) {
 						if (success == true) {
 							msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
-							msg.author.send("Current balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!" + "\n <@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + custom_message + "\n Left balance " + formatDisplayBalance((data.balance)-amount) + " " + coin_name + "!");
+							msg.author.send("Current balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!" + "\n <@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + "!" + custom_message + "\n Left balance " + formatDisplayBalance((data.balance)-amount) + " " + coin_name + "!");
 						} else { msg.channel.send(message); }
 
 					})});
