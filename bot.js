@@ -289,13 +289,11 @@ function checkCommand(msg) {
 				var tiptarget = msg.mentions.users.first().id;
 
 				var myname = msg.author.username;
-				var user = msg.client.username;
-
 				if (tiptarget != null) {
-					TipSomebody(msg, msg.author.id, msg.client.id, tiptarget, user, myname, amount, function (success, message) {
+					TipSomebody(msg, msg.author.id,  tiptarget, user, myname, amount, function (success, message) {
 						if (success == true) {
 							msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
-							msg.client.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
+							msg.auth.send("<@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + custom_message);
 						} else { msg.channel.send(message); }
 
 					});
