@@ -13,6 +13,7 @@ Node.js version 8.11.2 (compatible), other version is not recommended, but it ca
 
 Install nodejs 
 ```sudo apt install nodejs```
+
 Navigate to bot directory
 ```
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
