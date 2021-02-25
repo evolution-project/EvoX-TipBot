@@ -1,8 +1,8 @@
 {
-  "name": "EvoX-tipbot",
+  "name": "EvoxTipBot",
   "version": "1.0.0",
   "description": "Tipbot used for EvoX official Discord server",
-  "main": "bot.js",
+  "main": "tip.js",
   "scripts": {
     "test": "test"
   },

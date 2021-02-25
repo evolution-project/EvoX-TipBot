@@ -4,8 +4,9 @@ Its completlty reworked to use arqma-nodejs rpc calls.
 Soon will be udpated to use our new npm repository.
 ### Standard Requirements :
 ----------------------------------------------------------------------------
-Mongodb version 3.6.4 (compatible), other version use is not recommended, but it can work
-```sudo apt install mongodb```
+Mongodb version 3.6.4 (compatible), other version use is not recommended, but it can work.
+ 
+Install MongoDB ```sudo apt install mongodb```
 
 Node.js version 8.11.2 (compatible), other version is not recommended, but it can work
 
