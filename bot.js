@@ -1,22 +1,20 @@
 const Discord = require('discord.js');
+const request = require('request-promise');
 var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
-var moneroWallet = require('monero-nodejs');
+var moneroWallet = require('arqma-nodejs');
+var arqmaDaemon = require('./node_modules/arqma-nodejs/lib/daemon.js');
+
 var Big = require('big.js');
 var config = require('./bot_config');
 
-
 var Wallet = new moneroWallet(config.wallethostname, config.walletport);
-
-
-
-
+var Daemon = new arqmaDaemon(config.daemonhostname, config.daemontport);
 
 var bot_token = config.bot_token;
 
 bot.login(bot_token);
-
 
 var MongoClient = require('mongodb').MongoClient;
 var url = config.mongodburl;
@@ -47,10 +45,10 @@ function Initialize() {
 	});
 
 
-	MongoClient.connect(url, function (err, dbobj) {
+		MongoClient.connect(url, function (err, dbobj) {
 		if (err) throw err;
 		console.log("Database created, or already exists!");
-		var dbo = dbobj.db("deroTipBot");
+		var dbo = dbobj.db("arqmaBot");
 		dbo.createCollection("users", function (err, res) {
 			if (err) throw err;
 			if (log1) console.log("Collection users created or exists!");
@@ -85,10 +83,11 @@ function Initialize() {
 	});
 
 	Wallet.height().then(function (data) {
-		if (log3) console.log(data);
+	//	if (log3) console.log(data);
 		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.height);
 
 	});
+
 
 }
 function getWalletInfo(callback) {
@@ -97,21 +96,37 @@ function getWalletInfo(callback) {
 			Wallet.balance().then(function (balance) {
 
 
-				callback("Current wallet height is:" + data.height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
+				callback("Current wallet height is: " + data.height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
 
 			});
 
 		});
 	} catch (error) { callback(error); }
 }
+function get_height(callback) {
+	try {
+		Daemon.getHeight().then(function (data) {
+			callback("Daemon height is: " + data.height + " hmm"  );
 
+			});
+
+
+	} catch (error) { callback(error); }
+}
+function getBlockInfo(callback) {
+	try {
+		Wallet.height().then(function (data) {
+			callback("Blockchain height is: " + data.height + " :sunglasses: ");
+		});
+	} catch (error) { callback(error); }
+}
 
 bot.on('ready', function () {
-	if (log1) console.log("DERO TipBot ready and loaded correctly! Hello, admin");
-	bot.user.setActivity('READY');
+	if (log1) console.log("ARQMA TipBot ready and loaded correctly! Hello, admin");
+	bot.user.setActivity('!tiparq help');
 });
 function logBlockChainTransaction(incoming, authorId, paymentid, destination_wallet_address, blockheight, amount) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	if (incoming == true) { // log incoming transaction
 		getUserObjectFromPaymentId(paymentid, function (userdata) {
@@ -155,7 +170,7 @@ function getCustomMessageFromTipCommand(arguments) {
 }
 function logLocalTransaction(from, to, fromname, toname, amount) {
 
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 	var d = new Date(); // current date and time
 	var readableDateTimeObject = d.toLocaleDateString() + " " + d.toLocaleTimeString();
 
@@ -165,7 +180,7 @@ function logLocalTransaction(from, to, fromname, toname, amount) {
 	});
 }
 function isCallingBot(msg) {
-	if (msg.substring(0, 8) == "!tipdero") {
+	if (msg.substring(0, 7) == "!tiparq") {
 		return true;
 	} else { return false; }
 
@@ -210,12 +225,23 @@ function checkCommand(msg) {
 			case 'adminhelp':
 				isAdmin(msg.author.id, function (result) {
 					if (result == true) {
-						msg.author.send("Hello! Welcome to the ADMIN HELP SECTION. \n To show user info, type \"!tipdero showuserinfo userid\" \n To add an admin, type \"!tipdero addadmin userid\" (only available for owner) \n To remove an admin, type \"!tipdero removeadmin userid\" (only available for owner) \n To disable tipping for a user, type \"!tipdero switchtipsend userid allow/disallow\" \n To disable receive of tips for a user, type \"!tipdero switchtipreceive userid allow/disallow\" \n To stop the bot from listening to commands, type \"!tipdero stoplistening\" \n To start bot listening to commands, type \"!tipdero startlistening\" (only available to bot owner) \n To display wallet info, type \"!tipdero walletinfo\" (only available to bot owner)");
+						msg.author.send("Hello! Welcome to the ADMIN HELP SECTION. \n To show user info, type \"!tiparq showuserinfo userid\" \n To add an admin, type \"!tiparq addadmin userid\" (only available for owner) \n To remove an admin, type \"!tiparq removeadmin userid\" (only available for owner) \n To disable tipping for a user, type \"!tiparq switchtipsend userid allow/disallow\" \n To disable receive of tips for a user, type \"!tiparq switchtipreceive userid allow/disallow\" \n To stop the bot from listening to commands, type \"!tiparq stoplistening\" \n To start bot listening to commands, type \"!tiparq startlistening\" (only available to bot owner) \n To display wallet info, type \"!tiparq walletinfo\" (only available to bot owner)");
 					}
 				});
 				break;
+			case 'about':
+				msg.author.send("Hello! This is ArQmA TIP Bot version 0.1. \n Source based on Mojo-LB/CryptonoteTipBot repository :thumbsup: \n Code reworked by ArqTras for Arqma Network ");
+				break;
+
+				// network command
+				case 'network':
+								console.log('** Network info message sent');
+                msg.channel.send('Whoops! Arqtras thats better , please try again later. ' + (Daemon.height) + '😄');
+
+					break;
+
 			case 'help':
-				msg.author.send("Hello! Welcome to Dero TipBot help section. \n To get your balance, type \"!tipdero mybalance\" \n For deposits, type \"!tipdero deposit\" \n For withdrawals, type \"!tipdero withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tipdero tip <user_mention> <amount> <Optional: small message>\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
+				msg.author.send("Hello! Welcome to ArQmA TipBot help section. \n About authors, type \"!tiparq about\" \n To get your balance, type \"!tiparq mybalance\" \n To send someone 5 ARQ for a beer \"!tiparq beer\" \n For deposits, type \"!tiparq deposit\" \n For withdrawals, type \"!tiparq withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"!tiparq tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"!tiparq blockheight\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
 			case 'mybalance':
 				getBalance(msg.author.id, msg, function (data) {
@@ -223,7 +249,20 @@ function checkCommand(msg) {
 
 				});
 				break;
-			case 'deposit':
+      case 'test':
+            get_height(function (heightmessage) {
+              msg.channel.send(heightmessage);
+            });
+          break;
+
+			case 'balance':
+				getBalance(msg.author.id, msg, function (data) {
+					msg.author.send("Hey! Your balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!");
+
+				});
+				break;
+
+  		case 'deposit':
 				getBalance(msg.author.id, msg, function (data) {
 					msg.author.send("Hey! For deposit into the tip bot, use address: " + server_wallet_address + " WITH payment ID " + data.paymentid + " . If PaymentID is missing, your deposit will be lost");
 				});
@@ -233,9 +272,7 @@ function checkCommand(msg) {
 				var amount = arguments[3];
 				var custom_message = "";
 
-
-
-				//checkCorrectArguments
+			//checkCorrectArguments
 				try {
 					Big(amount);
 				} catch (error) { msg.reply("Oops! Invalid syntax"); return; }
@@ -253,19 +290,62 @@ function checkCommand(msg) {
 
 				var myname = msg.author.username;
 				if (tiptarget != null) {
-					TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
+						getBalance(msg.author.id, msg, function (data) {
+					TipSomebody(msg, msg.author.id,  tiptarget, user, myname, amount, function (success, message) {
 						if (success == true) {
 							msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + custom_message);
+							msg.author.send("Current balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!" + "\n <@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + "!" + custom_message + "\n Left balance " + formatDisplayBalance((data.balance)-amount) + " " + coin_name + "!");
 						} else { msg.channel.send(message); }
 
-					});
+					})});
 				} else {
 					msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
 				}
 				break;
+				//beer
+				case 'beer':
+					var user = arguments[2];
+					var amount = 5;
+					var custom_message = "";
+
+				//checkCorrectArguments
+		//			try {
+		//				Big(amount);
+		//			} catch (error) { msg.reply("Oops! Invalid syntax"); return; }
+					//
+					if (user == null) { msg.reply("Oops! Invalid syntax"); return; }
+					if (amount == null) { msg.reply("Oops! Invalid syntax"); return; }
+
+
+					try { user = msg.mentions.users.first().username; } catch (error) { msg.reply("Oops! Invalid syntax"); return; } /// check to avoid bot crash
+
+					try { custom_message = getCustomMessageFromTipCommand(arguments); } catch (err) { msg.reply("Oops! Something happened"); return; }
+
+
+					var tiptarget = msg.mentions.users.first().id;
+
+					var myname = msg.author.username;
+					if (tiptarget != null) {
+							getBalance(msg.author.id, msg, function (data) {
+						TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
+							if (success == true) {
+								msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + " to have a good weekend :beer: ");
+									msg.author.send("Current balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!" + "\n <@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + "!" + custom_message + "\n Left balance " + formatDisplayBalance((data.balance)-amount) + " " + coin_name + "!");
+							} else { msg.channel.send(message); }
+
+						})});
+					} else {
+						msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
+					}
+					break;
+			case 'blockheight':
+				getBlockInfo(function (walletmessage) {
+					msg.channel.send(walletmessage);
+				});
+				break;
 			case 'withdraw':
 				try {
-					if (Big(arguments[3]) < Big(withdraw_min_amount)) {
+					if (Big(arguments[3]).lt(Big(withdraw_min_amount))) {
 						msg.author.send("Withdrawal error : Withdrawal amount is below minimum withdrawal amount"); return;
 					}
 				} catch (error) { msg.author.send("Syntax error"); return; }
@@ -279,7 +359,7 @@ function checkCommand(msg) {
 							if (collected.first().content == "yes") {
 								withDraw(msg.author.id, arguments[2], arguments[3], function (success, txhash) {
 									if (success == true) {
-										msg.author.send("Your withdrawal request was successfuly executed and your funds are on the way :money_with_wings: . TxHash is " + txhash);
+										msg.author.send("Your withdrawal request was successfuly executed and your funds are on the way :money_with_wings: . TxHash is https://blocks.arqma.com/tx/" + txhash);
 									} else {
 										msg.author.send("An error has occured :scream: , error code is: " + txhash);
 
@@ -375,7 +455,7 @@ function checkCommand(msg) {
 }
 
 function switchTipReceive(authorId, targetId, decision, callback) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	var newdecision;
 
@@ -392,7 +472,7 @@ function switchTipReceive(authorId, targetId, decision, callback) {
 
 }
 function switchTipSend(authorId, targetId, decision, callback) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	var newdecision;
 
@@ -409,7 +489,7 @@ function switchTipSend(authorId, targetId, decision, callback) {
 
 }
 function addGeneralEvent(action_name, executed_By) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 	var d = new Date(); // current date and time
 	var readableDateTimeObject = d.toLocaleDateString() + " " + d.toLocaleTimeString();
 
@@ -422,7 +502,7 @@ function addGeneralEvent(action_name, executed_By) {
 
 function generateNewPaymentIdForUser(authorId, targetId, callback) {
 
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	dbo.collection("users").findOne({ userid: targetId }, function (err, result) {
 		if (err) throw err;
@@ -454,7 +534,7 @@ function generateNewPaymentIdForUser(authorId, targetId, callback) {
 function isAdmin(authorId, callback) {
 	if (authorId == owner_id) { callback(true); return; }
 
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	dbo.collection("admins").findOne({ userid: authorId }, function (err, result) {
 		if (err) throw err;
@@ -480,7 +560,7 @@ function showUserInfo(authorId, targetId, callback) {
 	});
 }
 function addAdmin(authorId, targetId, callback) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	dbo.collection("admins").findOne({ userid: targetId }, function (err, result) {
 		if (err) throw err;
@@ -510,7 +590,7 @@ function addAdmin(authorId, targetId, callback) {
 }
 function removeAdmin(authorId, targetId, callback) {
 	if (log3) console.log("removeAdmin function was called. Command issuer id: " + authorId + " . Target (id): " + targetId);
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	var adminObject = { userid: targetId };
 	dbo.collection("admins").deleteOne(adminObject, function (err, res) {
@@ -521,12 +601,6 @@ function removeAdmin(authorId, targetId, callback) {
 		addGeneralEvent("Removed admin with user id " + targetId, authorId); // log the action
 
 	});
-
-
-
-
-
-
 
 }
 
@@ -552,7 +626,7 @@ function withDraw(authorId, walletaddress, w_amount, callback) {
 			if (log3) console.log("Function withdraw: minus: " + authorbalance.minus(wamount).toString());
 			var checkEnoughBalance = authorbalance.minus(wamount);
 			var withdrawAmountTxFeesCheck = Big(wamount).minus(Big(withdraw_tx_fees));
-			if (checkEnoughBalance >= 0 && withdrawAmountTxFeesCheck > 0) {
+			if (checkEnoughBalance.gte(Big(0)) && withdrawAmountTxFeesCheck.gt(Big(0))) {
 				wamount = wamount.minus(Big(withdraw_tx_fees));
 				if (log3) console.log("Function withdraw: withdraw amount (wamount) minus tx fees" + wamount.toString());
 				// wamount = getWalletFormatFromBigNumber(wamount); not required since getWalletFormatFromBigNumber ^
@@ -592,7 +666,7 @@ function withDraw(authorId, walletaddress, w_amount, callback) {
 
 function minusBalance(targetId, amount, callback) {
 	if (log3) console.log("Function minusBalance called. target (id) : " + targetId + " . amount: " + amount.toString());
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	getUserObject(targetId, function (data) {
 
@@ -614,7 +688,7 @@ function minusBalance(targetId, amount, callback) {
 }
 
 function addBalance(targetId, amount, callback) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 
 	getUserObject(targetId, function (data) {
 
@@ -668,10 +742,10 @@ function TipSomebody(msg, authorId, tipTarget, tiptargetname, tipperauthorname, 
 					authorbalance = new Big(data.balance);
 					console.log(authorbalance);
 					console.log(transactionamount);
-					console.log(authorbalance >= transactionamount);
-					if (authorbalance >= transactionamount) {
+					console.log(authorbalance.gte(transactionamount));
+					if (authorbalance.gte(transactionamount)) {
 
-						var dbo = db.db("deroTipBot");
+						var dbo = db.db("arqmaBot");
 						var myquery = { userid: authorId };
 						console.log("Internal transaction processing,  amount : " + transactionamount);
 						var authorNewBalance = Big(authorbalance.minus(transactionamount)).toFixed(coin_total_units);
@@ -699,20 +773,9 @@ function TipSomebody(msg, authorId, tipTarget, tiptargetname, tipperauthorname, 
 								});
 
 							});
-
-
-
-
-
 							if (err) throw err;
 							console.log("1 user updated");
 						});
-
-
-
-
-
-
 					} else {
 						msg.reply("You don't have enough balance for that :( ");
 						callback(false);
@@ -765,7 +828,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 		}
 		walletheight = data.height;
 		console.log(walletheight);
-		var dbo = db.db("deroTipBot");
+		var dbo = db.db("arqmaBot");
 		var query = { userid: g_userid };
 		dbo.collection("users").findOne(query, function (err, result) {
 			if (err) throw err;
@@ -787,7 +850,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 								if (log3) console.log("Block matured amount" + bulkdata.payments[i].amount);
 								if (log3) console.log("Block deposit height" + bulkdata.payments[i].block_height);
 								bPaymentFound = true;
-								lastcheckheight = bulkdata.payments[i].block_height + 1; // +1 because wallet getbulkpayments is from >= 
+								lastcheckheight = bulkdata.payments[i].block_height + 1; // +1 because wallet getbulkpayments is from >=
 
 								logBlockChainTransaction(true, null, result.paymentid, null, bulkdata.payments[i].block_height, bulkdata.payments[i].amount);
 
@@ -831,7 +894,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 
 
 function createNewUser(targetId, callback) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 	var initial_balance = 0;
 	initial_balance = initial_balance.toFixed(coin_total_units);
 
@@ -849,7 +912,7 @@ function createNewUser(targetId, callback) {
 
 
 function getUserObject(targetId, callback) {
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 	var query = { userid: targetId };
 	dbo.collection("users").findOne(query, function (err, result) {
 		if (err) throw err;
@@ -860,7 +923,7 @@ function getUserObject(targetId, callback) {
 }
 function getUserObjectFromPaymentId(pid, callback) {
 
-	var dbo = db.db("deroTipBot");
+	var dbo = db.db("arqmaBot");
 	var query = { paymentid: pid };
 	dbo.collection("users").findOne(query, function (err, result) {
 		if (err) throw err;
@@ -904,14 +967,4 @@ function getBalance(authorId, msg, callback) {
 
 }
 
-
-
-
-
-
 bot.on('message', msg => checkCommand(msg));
-
-
-
-
-

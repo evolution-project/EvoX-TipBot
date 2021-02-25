@@ -13,6 +13,8 @@
     "discord.js": "^11.3.2",
     "monero-nodejs": "^3.2.2",
     "mongodb": "^3.1.0-beta4",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "safe-json-stringify": "^1.1.0"
   }
 }

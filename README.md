@@ -1,13 +1,8 @@
-# Dero TipBot
+# ArQmA TipBot
 
-### This Should work with Monero, and any fork that uses 12-decimals
-
-If you like to adjust to other forks that don't use 12-decimals, please change decimal value in `node-mdules/xmr-nodejs` or create a new module for your prefered coin
-
-Or even better, adjust to have it a configurable option and create a PR :)
-
-
-### Standard Requirements : 
+Its completlty reworked to use arqma-nodejs rpc calls.
+Soon will be udpated to use our new npm repository.
+### Standard Requirements :
 ----------------------------------------------------------------------------
 Mongodb version 3.6.4 (compatible), other version use is not recommended, but it can work
 ```sudo apt install mongodb```
@@ -39,6 +34,7 @@ nvm install 8.11.2
 ----------------------------------------------------------------------------
 #### Instructions for bot_config.js
 ```
+For Arqma coin start wallet rpc on port 59999
 wallethostname - your wallet RPC server hostname, default is already included
 walletport - your wallet RPC server port, default is already included
 bot_token - get your token from https://discordapp.com/developers/applications/me (as of 22.05.2018). generate user for the bot, and click to reveal the Token
