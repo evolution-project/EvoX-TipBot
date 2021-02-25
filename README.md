@@ -5,11 +5,14 @@ Soon will be udpated to use our new npm repository.
 ### Standard Requirements :
 ----------------------------------------------------------------------------
 Mongodb version 3.6.4 (compatible), other version use is not recommended, but it can work.
- 
-Install MongoDB ```sudo apt install mongodb```
+
+Install MongoDB 
+```sudo apt install mongodb```
 
 Node.js version 8.11.2 (compatible), other version is not recommended, but it can work
 
+Install nodejs 
+```sudo apt install nodejs```
 Navigate to bot directory
 ```
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
