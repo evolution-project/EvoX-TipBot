@@ -49,7 +49,7 @@ function Initialize() {
 		MongoClient.connect(url, function (err, dbobj) {
 		if (err) throw err;
 		console.log("Database created, or already exists!");
-		var dbo = dbobj.db("evoxBot");
+		var dbo = dbobj.db("TipBot");
 		dbo.createCollection("users", function (err, res) {
 			if (err) throw err;
 			if (log1) console.log("Collection users created or exists!");
@@ -127,7 +127,7 @@ bot.on('ready', function () {
 	bot.user.setActivity('-evox help');
 });
 function logBlockChainTransaction(incoming, authorId, paymentid, destination_wallet_address, blockheight, amount) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	if (incoming == true) { // log incoming transaction
 		getUserObjectFromPaymentId(paymentid, function (userdata) {
@@ -171,7 +171,7 @@ function getCustomMessageFromTipCommand(arguments) {
 }
 function logLocalTransaction(from, to, fromname, toname, amount) {
 
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 	var d = new Date(); // current date and time
 	var readableDateTimeObject = d.toLocaleDateString() + " " + d.toLocaleTimeString();
 
@@ -456,7 +456,7 @@ function checkCommand(msg) {
 }
 
 function switchTipReceive(authorId, targetId, decision, callback) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	var newdecision;
 
@@ -473,7 +473,7 @@ function switchTipReceive(authorId, targetId, decision, callback) {
 
 }
 function switchTipSend(authorId, targetId, decision, callback) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	var newdecision;
 
@@ -490,7 +490,7 @@ function switchTipSend(authorId, targetId, decision, callback) {
 
 }
 function addGeneralEvent(action_name, executed_By) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 	var d = new Date(); // current date and time
 	var readableDateTimeObject = d.toLocaleDateString() + " " + d.toLocaleTimeString();
 
@@ -503,7 +503,7 @@ function addGeneralEvent(action_name, executed_By) {
 
 function generateNewPaymentIdForUser(authorId, targetId, callback) {
 
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	dbo.collection("users").findOne({ userid: targetId }, function (err, result) {
 		if (err) throw err;
@@ -535,7 +535,7 @@ function generateNewPaymentIdForUser(authorId, targetId, callback) {
 function isAdmin(authorId, callback) {
 	if (authorId == owner_id) { callback(true); return; }
 
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	dbo.collection("admins").findOne({ userid: authorId }, function (err, result) {
 		if (err) throw err;
@@ -561,7 +561,7 @@ function showUserInfo(authorId, targetId, callback) {
 	});
 }
 function addAdmin(authorId, targetId, callback) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	dbo.collection("admins").findOne({ userid: targetId }, function (err, result) {
 		if (err) throw err;
@@ -591,7 +591,7 @@ function addAdmin(authorId, targetId, callback) {
 }
 function removeAdmin(authorId, targetId, callback) {
 	if (log3) console.log("removeAdmin function was called. Command issuer id: " + authorId + " . Target (id): " + targetId);
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	var adminObject = { userid: targetId };
 	dbo.collection("admins").deleteOne(adminObject, function (err, res) {
@@ -667,7 +667,7 @@ function withDraw(authorId, walletaddress, w_amount, callback) {
 
 function minusBalance(targetId, amount, callback) {
 	if (log3) console.log("Function minusBalance called. target (id) : " + targetId + " . amount: " + amount.toString());
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	getUserObject(targetId, function (data) {
 
@@ -689,7 +689,7 @@ function minusBalance(targetId, amount, callback) {
 }
 
 function addBalance(targetId, amount, callback) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 
 	getUserObject(targetId, function (data) {
 
@@ -746,7 +746,7 @@ function TipSomebody(msg, authorId, tipTarget, tiptargetname, tipperauthorname, 
 					console.log(authorbalance.gte(transactionamount));
 					if (authorbalance.gte(transactionamount)) {
 
-						var dbo = db.db("evoxBot");
+						var dbo = db.db("TipBot");
 						var myquery = { userid: authorId };
 						console.log("Internal transaction processing,  amount : " + transactionamount);
 						var authorNewBalance = Big(authorbalance.minus(transactionamount)).toFixed(coin_total_units);
@@ -829,7 +829,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 		}
 		walletheight = data.height;
 		console.log(walletheight);
-		var dbo = db.db("evoxBot");
+		var dbo = db.db("TipBot");
 		var query = { userid: g_userid };
 		dbo.collection("users").findOne(query, function (err, result) {
 			if (err) throw err;
@@ -895,7 +895,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 
 
 function createNewUser(targetId, callback) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 	var initial_balance = 0;
 	initial_balance = initial_balance.toFixed(coin_total_units);
 
@@ -913,7 +913,7 @@ function createNewUser(targetId, callback) {
 
 
 function getUserObject(targetId, callback) {
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 	var query = { userid: targetId };
 	dbo.collection("users").findOne(query, function (err, result) {
 		if (err) throw err;
@@ -924,7 +924,7 @@ function getUserObject(targetId, callback) {
 }
 function getUserObjectFromPaymentId(pid, callback) {
 
-	var dbo = db.db("evoxBot");
+	var dbo = db.db("TipBot");
 	var query = { paymentid: pid };
 	dbo.collection("users").findOne(query, function (err, result) {
 		if (err) throw err;
