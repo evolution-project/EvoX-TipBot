@@ -1,20 +1,19 @@
 {
-  "name": "dero-tipbot",
+  "name": "EvoxTipBot",
   "version": "1.0.0",
-  "description": "Tipbot used for Dero official Discord server",
-  "main": "bot.js",
+  "description": "Tipbot used for EvoX official Discord server",
+  "main": "tip.js",
   "scripts": {
     "test": "test"
   },
-  "author": "",
+  "author": "ArtFix",
   "license": "ISC",
   "dependencies": {
-    "big.js": "^5.0.3",
-    "discord.js": "^11.3.2",
-    "monero-nodejs": "^3.2.2",
+    "big.js": "^5.2.2",
+    "discord.js": "^11.6.4",
     "mongodb": "^3.1.0-beta4",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "safe-json-stringify": "^1.1.0"
+    "safe-json-stringify": "^1.2.0"
   }
 }
