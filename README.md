@@ -1,4 +1,4 @@
-# ArQmA TipBot
+# EvoX TipBot
 
 Its completlty reworked to use arqma-nodejs rpc calls.
 Soon will be udpated to use our new npm repository.
@@ -26,15 +26,13 @@ nvm install 8.11.2
    `npm install discord.js`  
 
    `npm install safe-json-stringify`  
-
-   `npm install monero-nodejs`  
-
+  
    `npm install big.js`  
 
 ----------------------------------------------------------------------------
 #### Instructions for bot_config.js
 ```
-For Arqma coin start wallet rpc on port 59999
+For Evolution coin start wallet rpc on port 55055
 wallethostname - your wallet RPC server hostname, default is already included
 walletport - your wallet RPC server port, default is already included
 bot_token - get your token from https://discordapp.com/developers/applications/me (as of 22.05.2018). generate user for the bot, and click to reveal the Token
