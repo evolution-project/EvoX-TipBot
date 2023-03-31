@@ -1,16 +1,21 @@
-const Discord = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const request = require('request-promise');
-var bot = new Discord.Client();
 const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
 var evolutionWallet = require('evox-rpc-js').RPCWallet;
 var evolutionDaemon = require('evox-rpc-js').RPCDaemon;
+var bot = new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages
+    ]
+  });
 
 var Big = require('big.js');
 var config = require('./bot_config');
 
-var Wallet = evolutionWallet(url, config.wallethostname);
-var Daemon = evolutionDaemon(url, config.daemonhostname);
+var Wallet = evolutionWallet.createWalletClient({url: config.wallethostname});
+var Daemon = evolutionDaemon.createDaemonClient({url: config.daemonhostname});
 
 var bot_token = config.bot_token;
 
@@ -108,7 +113,7 @@ function getBlockInfo(callback) {
 
 bot.on('ready', function () {
 	if (log1) console.log("EvoX TipBot ready and loaded correctly! Hello, admin");
-	bot.user.setActivity('-evox help');
+	bot.user.setActivity('-cosmos dev');
 });
 
 function logBlockChainTransaction(incoming, authorId, paymentid, destination_wallet_address, blockheight, amount) {
