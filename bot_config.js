@@ -2,7 +2,7 @@ module.exports = {
 
     wallethostname: "http://127.0.0.1:55055",
     daemonhostname: "http://127.0.0.1:52521",
-    bot_token : "ODA3MjQxMzMyMjM3NDAyMTMz.Gl3yDt.ADDKmScfQxi-uGy_Q4EPbroGIucJL8lTvqtLME",
+    bot_token : "MTA5MTM1Mjk1OTY4Nzg2MDI0NA.GiGRkm.me--QtwL63zDoOmNzquUcT3Qla_alSrWD6iY7g",
     mongodburl: "mongodb://127.0.0.1:27017/TipBot",
     
     owner_id : "939918743805497375",

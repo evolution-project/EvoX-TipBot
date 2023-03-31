@@ -1,28 +1,25 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const request = require('request-promise');
-const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
 var evolutionWallet = require('evox-rpc-js').RPCWallet;
 var evolutionDaemon = require('evox-rpc-js').RPCDaemon;
+var Big = require('big.js');
+var config = require('./bot_config');
+var MongoClient = require('mongodb').MongoClient;
+var urldb = config.mongodburl;
+
 var bot = new Client({
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages
     ]
   });
-
-var Big = require('big.js');
-var config = require('./bot_config');
-
 var Wallet = evolutionWallet.createWalletClient({url: config.wallethostname});
+Wallet.sslRejectUnauthorized(false);
 var Daemon = evolutionDaemon.createDaemonClient({url: config.daemonhostname});
+Daemon.sslRejectUnauthorized(false);
 
-var bot_token = config.bot_token;
-
-bot.login(bot_token);
-
-var MongoClient = require('mongodb').MongoClient;
-var url = config.mongodburl;
+bot.login(config.bot_token);
 
 Initialize();
 
@@ -43,10 +40,8 @@ var isBotListening = false; // Initial is false to wait for the database to conn
 var db;
 
 function Initialize() {
-	Wallet.getBalance().then(function (balance) {
-		if (log1) console.log("Stats for admins - current balance: " + balance.balance + " " + coin_name);
-	});
-		MongoClient.connect(url, function (err, dbobj) {
+	Wallet.getBalance().then(function (balance) {if (log1) console.log("Stats for admins - current balance: " + balance.balance + " " + coin_name);});
+		MongoClient.connect(urldb, function (err, dbobj) {
 		if (err) throw err;
 		console.log("Database created, or already exists!");
 		var dbo = dbobj.db("TipBot");
@@ -113,7 +108,7 @@ function getBlockInfo(callback) {
 
 bot.on('ready', function () {
 	if (log1) console.log("EvoX TipBot ready and loaded correctly! Hello, admin");
-	bot.user.setActivity('-cosmos dev');
+	bot.user.setActivity('WOT');
 });
 
 function logBlockChainTransaction(incoming, authorId, paymentid, destination_wallet_address, blockheight, amount) {
@@ -170,6 +165,7 @@ function convertToSystemValue(value) {
 }
 
 function checkCommand(msg) {
+    console.log('1')
 	if (isCallingBot(msg.content) == true) {
 		var arguments = msg.content.replace(/\s+/g, ' ').trim().split(' ');  // removes additional spaces
 		var command = arguments[1];

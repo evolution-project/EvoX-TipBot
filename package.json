@@ -9,12 +9,11 @@
   "author": "cosmos",
   "license": "ISC",
   "dependencies": {
-    "big.js": "^6.2.1",
+    "big.js": "^5.2.2",
     "discord.js": "^14.8.0",
-    "mongodb": "^5.1.0",
+    "mongodb": "^3.1.0-beta4",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6",
-    "safe-json-stringify": "^1.2.0",
+    "request-promise": "^4.2.4",
     "evox-rpc-js": "https://github.com/cosmos2202/evox-rpc-js.git"
   }
 }
