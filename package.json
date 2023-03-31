@@ -1,19 +1,20 @@
 {
-  "name": "EvoxTipBot",
+  "name": "evoxtipbot",
   "version": "1.0.0",
-  "description": "Tipbot used for EvoX official Discord server",
-  "main": "tip.js",
+  "description": "",
+  "main": "bot.js",
   "scripts": {
-    "test": "test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ArtFix",
+  "author": "cosmos",
   "license": "ISC",
   "dependencies": {
-    "big.js": "^5.2.2",
-    "discord.js": "^11.6.4",
-    "mongodb": "^3.1.0-beta4",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4",
-    "safe-json-stringify": "^1.2.0"
+    "big.js": "^6.2.1",
+    "discord.js": "^14.8.0",
+    "mongodb": "^5.1.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "safe-json-stringify": "^1.2.0",
+    "evox-rpc-js": "https://github.com/cosmos2202/evox-rpc-js.git"
   }
 }
