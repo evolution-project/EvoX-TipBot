@@ -2,11 +2,11 @@ module.exports = {
 
     wallethostname: "http://127.0.0.1:55055",
     daemonhostname: "http://127.0.0.1:52521",
-    bot_token : "MTA5MTM1Mjk1OTY4Nzg2MDI0NA.GiGRkm.me--QtwL63zDoOmNzquUcT3Qla_alSrWD6iY7g",
+    bot_token : "MTA5MTM1Mjk1OTY4Nzg2MDI0NA.GVatGM.xCicH_7rne7Je-EinQd4kjPCDAnQvp9pO5bRiY",
     mongodburl: "mongodb://127.0.0.1:27017/TipBot",
     
     owner_id : "939918743805497375",
-    coin_name : "EVOX",
+    coin_name : "EvoX",
     block_maturity_requirement : 10,
     coin_total_units : 12,
     coin_display_units : 2,

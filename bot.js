@@ -1,25 +1,21 @@
-const { Client, GatewayIntentBits } = require('discord.js');
-const request = require('request-promise');
+const Discord = require('discord.js');
+var bot = new Discord.Client();
+const safeJsonStringify = require('safe-json-stringify');
 var crypto = require('crypto');
-var evolutionWallet = require('evox-rpc-js').RPCWallet;
-var evolutionDaemon = require('evox-rpc-js').RPCDaemon;
+var Wallet = require('evox-rpc-js').RPCWallet;
+var Daemon = require('evox-rpc-js').RPCDaemon
 var Big = require('big.js');
 var config = require('./bot_config');
-var MongoClient = require('mongodb').MongoClient;
-var urldb = config.mongodburl;
 
-var bot = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages
-    ]
-  });
-var Wallet = evolutionWallet.createWalletClient({url: config.wallethostname});
+var Wallet = Wallet.createWalletClient({url: config.wallethostname});
 Wallet.sslRejectUnauthorized(false);
-var Daemon = evolutionDaemon.createDaemonClient({url: config.daemonhostname});
+var Daemon = Daemon.createDaemonClient({url: config.daemonhostname});
 Daemon.sslRejectUnauthorized(false);
 
 bot.login(config.bot_token);
+
+var MongoClient = require('mongodb').MongoClient;
+var urldb = config.mongodburl;
 
 Initialize();
 
@@ -100,7 +96,7 @@ function get_height(callback) {
 
 function getBlockInfo(callback) {
 	try {
-		Daemon.getBlockCount().then(function (data) {
+		Daemon.getheight().then(function (data) {
 			callback("Blockchain height is: " + data.height + " :sunglasses: ");
 		});
 	} catch (error) { callback(error); }
@@ -152,7 +148,7 @@ function logLocalTransaction(from, to, fromname, toname, amount) {
 }
 
 function isCallingBot(msg) {
-	if (msg.substring(0, 5) == "-evox") {
+	if (msg.substring(0, 1) == "/") {
 		return true;
 	} else { return false; }
 
@@ -165,7 +161,6 @@ function convertToSystemValue(value) {
 }
 
 function checkCommand(msg) {
-    console.log('1')
 	if (isCallingBot(msg.content) == true) {
 		var arguments = msg.content.replace(/\s+/g, ' ').trim().split(' ');  // removes additional spaces
 		var command = arguments[1];
@@ -195,7 +190,7 @@ function checkCommand(msg) {
 			case 'adminhelp':
 				isAdmin(msg.author.id, function (result) {
 					if (result == true) {
-						msg.author.send("Hello! Welcome to the ADMIN HELP SECTION. \n To show user info, type \"-evox userinfo userid\" \n To add an admin, type \"-evox addadmin userid\" (only available for owner) \n To remove an admin, type \"-evox removeadmin userid\" (only available for owner) \n To disable tipping for a user, type \"-evox switchtipsend userid allow/disallow\" \n To disable receive of tips for a user, type \"-evox switchtipreceive userid allow/disallow\" \n To stop the bot from listening to commands, type \"-evox stoplistening\" \n To start bot listening to commands, type \"-evox startlistening\" (only available to bot owner) \n To display wallet info, type \"-evox walletinfo\" (only available to bot owner) \n To display block height, type \"-evox block\" (only)");
+						msg.author.send("Hello! Welcome to the ADMIN HELP SECTION. \n To show user info, type \"/ userinfo userid\" \n To add an admin, type \"/ addadmin userid\" (only available for owner) \n To remove an admin, type \"/ removeadmin userid\" (only available for owner) \n To disable tipping for a user, type \"/ switchtipsend userid allow/disallow\" \n To disable receive of tips for a user, type \"/ switchtipreceive userid allow/disallow\" \n To stop the bot from listening to commands, type \"/ stoplistening\" \n To start bot listening to commands, type \"/ startlistening\" (only available to bot owner) \n To display wallet info, type \"/ walletinfo\" (only available to bot owner) \n To display block height, type \"/ block\" (only)");
 					}
 				});
 				break;
@@ -208,7 +203,7 @@ function checkCommand(msg) {
 
 					break;
 			case 'help':
-				msg.author.send("Hello! Welcome to Evolution TipBot help section. \n About authors, type \"-evox about\" \n To send someone 5 EVOX for a beer \"-evox beer\" \n For deposits, type \"-evox deposit\" \n For withdrawals, type \"-evox withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"-evox tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"-evox block\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
+				msg.author.send("Hello! Welcome to Evolution TipBot help section. \n About authors, type \"/ about\" \n To send someone 5 EVOX for a beer \"/ beer\" \n For deposits, type \"/ deposit\" \n For withdrawals, type \"/ withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"/ tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"/ block\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
       case 'test':
             get_height(function (heightmessage) {
@@ -644,7 +639,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 	console.log("UpdateBalanceForUser function called");
 	var walletheight;
 	var bPaymentFound = false;
-	Wallet.height().then(function (data) {
+	Daemon.getheight().then(function (data) {
 		if (!data.hasOwnProperty("height")) {
 			console.log("Cannot get current wallet blockchain height! For security reasons, skipping the balance update");
 			callback();
@@ -658,7 +653,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 			if (err) throw err;
 			if (result == null) { callback(); return; }
 			if (log3) console.log(result.paymentid);
-			Wallet.getBulkPayments([result.paymentid], result.lastdepositbh).then(function (bulkdata) {
+			Wallet.get_bulk_payments([result.paymentid], result.lastdepositbh).then(function (bulkdata) {
 				if (bulkdata.hasOwnProperty("payments")) {
 					getUserObject(g_userid, function (userobject) {
 						var lastcheckheight = 0;
