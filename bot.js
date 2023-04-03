@@ -148,7 +148,7 @@ function logLocalTransaction(from, to, fromname, toname, amount) {
 }
 
 function isCallingBot(msg) {
-	if (msg.substring(0, 1) == "/") {
+	if (msg[0] == "/") {
 		return true;
 	} else { return false; }
 
@@ -162,7 +162,7 @@ function convertToSystemValue(value) {
 
 function checkCommand(msg) {
 	if (isCallingBot(msg.content) == true) {
-		var arguments = msg.content.replace(/\s+/g, ' ').trim().split(' ');  // removes additional spaces
+		var arguments = msg.content.replace(/\s+/g,'/').trim().split('/');  // removes additional spaces
 		var command = arguments[1];
 		if (isBotListening == false && msg.author.id == owner_id) {
 			if (command == "startlistening") {
@@ -203,7 +203,7 @@ function checkCommand(msg) {
 
 					break;
 			case 'help':
-				msg.author.send("Hello! Welcome to Evolution TipBot help section. \n About authors, type \"/ about\" \n To send someone 5 EVOX for a beer \"/ beer\" \n For deposits, type \"/ deposit\" \n For withdrawals, type \"/ withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"/ tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"/ block\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
+				msg.author.send("Hello! Welcome to Evolution TipBot help section. \n About authors, type \"/about\" \n To send someone 5 EVOX for a beer \"/beer\" \n For deposits, type \"/deposit\" \n For withdrawals, type \"/withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"/tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"/block\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
       case 'test':
             get_height(function (heightmessage) {
