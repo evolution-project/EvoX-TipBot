@@ -71,16 +71,16 @@ function Initialize() {
 			if (log3) { console.log("Database connected sucessfuly. Bot started listening"); }
 		}
 	});
-	Daemon.getheight().then(function (data) {
-		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.height);
+	Wallet.get_wallet_info().then(function (data) {
+		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.current_height);
 	});
 }
 
 function getWalletInfo(callback) {
 	try {
-		Daemon.getheight().then(function (data) {
+		Wallet.get_wallet_info().then(function (data) {
 			Wallet.getBalance().then(function (balance) {
-				callback("Current wallet height is: " + data.height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
+				callback("Current wallet height is: " + data.current_height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
 			});
 		});
 	} catch (error) { callback(error); }
@@ -639,13 +639,13 @@ function UpdateBalanceForUser(g_userid, callback) {
 	console.log("UpdateBalanceForUser function called");
 	var walletheight;
 	var bPaymentFound = false;
-	Daemon.getheight().then(function (data) {
+	Wallet.get_wallet_info().then(function (data) {
 		if (!data.hasOwnProperty("height")) {
 			console.log("Cannot get current wallet blockchain height! For security reasons, skipping the balance update");
 			callback();
 			return;
 		}
-		walletheight = data.height;
+		walletheight = data.current_height;
 		console.log(walletheight);
 		var dbo = db.db("TipBot");
 		var query = { userid: g_userid };
