@@ -6,6 +6,7 @@ var Wallet = require('evox-rpc-js').RPCWallet;
 var Daemon = require('evox-rpc-js').RPCDaemon
 var Big = require('big.js');
 var config = require('./bot_config');
+const { error } = require('console');
 
 var Wallet = Wallet.createWalletClient({url: config.wallethostname});
 Wallet.sslRejectUnauthorized(false);
@@ -71,16 +72,16 @@ function Initialize() {
 			if (log3) { console.log("Database connected sucessfuly. Bot started listening"); }
 		}
 	});
-	Daemon.getheight().then(function (data) {
-		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.height);
+	Wallet.get_wallet_info().then(function (data) {
+		if (log1) console.log("CURRENT WALLET HEIGHT: " + data.current_height);
 	});
 }
 
 function getWalletInfo(callback) {
 	try {
-		Daemon.getheight().then(function (data) {
+		Wallet.get_wallet_info().then(function (data) {
 			Wallet.getBalance().then(function (balance) {
-				callback("Current wallet height is: " + data.height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
+				callback("Current wallet height is: " + data.current_height + " . Current wallet balance is: " + getReadableFloatBalanceFromWalletFormat(balance.balance).toFixed(coin_total_units) + " . Current unlocked balance is: " + getReadableFloatBalanceFromWalletFormat(balance.unlocked_balance).toFixed(coin_total_units));
 			});
 		});
 	} catch (error) { callback(error); }
@@ -148,10 +149,9 @@ function logLocalTransaction(from, to, fromname, toname, amount) {
 }
 
 function isCallingBot(msg) {
-	if (msg.substring(0, 1) == "/") {
+	if (msg[0] == "/") {
 		return true;
 	} else { return false; }
-
 }
 
 function convertToSystemValue(value) {
@@ -162,7 +162,7 @@ function convertToSystemValue(value) {
 
 function checkCommand(msg) {
 	if (isCallingBot(msg.content) == true) {
-		var arguments = msg.content.replace(/\s+/g, ' ').trim().split(' ');  // removes additional spaces
+		var arguments = msg.content.replace(/\s+/g,'/').trim().split('/');  // removes additional spaces
 		var command = arguments[1];
 		if (isBotListening == false && msg.author.id == owner_id) {
 			if (command == "startlistening") {
@@ -195,7 +195,7 @@ function checkCommand(msg) {
 				});
 				break;
 			case 'about':
-				msg.author.send("Hello! This is EvoX TIP Bot version 0.1. \n Source based on Mojo-LB/CryptonoteTipBot repository :thumbsup: \n Code reworked by ArtFix for Evolution Network ");
+				msg.author.send("Hello! This is EvoX TIP Bot version 0.1 \n Source based on Mojo-LB/CryptonoteTipBot repository :thumbsup: \n Created Cosmos & ArtFix for Evolution Network ");
 				break;
 				case 'network':
 								console.log('** Network info message sent');
@@ -203,7 +203,15 @@ function checkCommand(msg) {
 
 					break;
 			case 'help':
-				msg.author.send("Hello! Welcome to Evolution TipBot help section. \n About authors, type \"/ about\" \n To send someone 5 EVOX for a beer \"/ beer\" \n For deposits, type \"/ deposit\" \n For withdrawals, type \"/ withdraw <walletaddress> <amount>\" (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n To tip someone, type \"/ tip <user_mention> <amount> <Optional: small message>\" \n Blochchain height \"/ block\" \n We are not responsible for any system abuse, please don't deposit/leave big amounts ");
+				msg.author.send("Hello! Welcome to Evolution TipBot help section. \n" + 
+				"About authors, type \`/about`\ \n" +
+				"To send someone 5 EVOX for a beer \`/beer\` \n" +
+				"For deposits, type \`/deposit\` \n" +
+				"For withdrawals, type \`/withdraw <walletaddress> <amount>\` (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n" +
+				"To tip someone, type \`/tip <user_mention> <amount> <Optional: small message>\` \n" +
+				"Blochchain height \`/block\` \n" +
+				"Your balance \`/balance\` \n" +
+				"We are not responsible for any system abuse, please don't deposit/leave big amounts ");
 				break;
       case 'test':
             get_height(function (heightmessage) {
@@ -217,18 +225,19 @@ function checkCommand(msg) {
 				break;
   		case 'deposit':
 				getBalance(msg.author.id, msg, function (data) {
-					msg.author.send("Hey! For deposit into the tip bot, use address: " + server_wallet_address + " WITH payment ID " + data.paymentid + " . If PaymentID is missing, your deposit will be lost");
+					msg.author.send("Hey! For deposit into the tip bot, use address: " + data.useraddress);
 				});
 				break;
 			case 'tip':
 				var user = arguments[2];
 				var amount = arguments[3];
 				var custom_message = "";
+				console.log(Big(amount))
 				try {
 					Big(amount);
 				} catch (error) { msg.reply("Oops! Invalid syntax"); return; }
-				if (user == null) { msg.reply("Oops! Invalid syntax"); return; }
-				if (amount == null) { msg.reply("Oops! Invalid syntax"); return; }
+				if (user == null) { msg.reply("Oops! There is no such user!"); return; }
+				if (amount == null) { msg.reply("Oops! The amount is not specified or incorrectly specified."); return; }
 				try { user = msg.mentions.users.first().username; } catch (error) { msg.reply("Oops! Invalid syntax"); return; } /// check to avoid bot crash
 				try { custom_message = getCustomMessageFromTipCommand(arguments); } catch (err) { msg.reply("Oops! Something happened"); return; }
 				var tiptarget = msg.mentions.users.first().id;
@@ -290,7 +299,7 @@ function checkCommand(msg) {
 							if (collected.first().content == "yes") {
 								withDraw(msg.author.id, arguments[2], arguments[3], function (success, txhash) {
 									if (success == true) {
-										msg.author.send("Your withdrawal request was successfuly executed and your funds are on the way :money_with_wings: . TxHash is https://explorer.evolutionproject.space/tx/" + txhash);
+										msg.author.send("Your withdrawal request was successfuly executed and your funds are on the way :money_with_wings: . TxHash is https://chain.evolution-network.org/transaction/" + txhash);
 									} else {
 										msg.author.send("An error has occured :scream: , error code is: " + txhash);
 									}
@@ -501,11 +510,12 @@ function withDraw(authorId, walletaddress, w_amount, callback) {
 			var checkEnoughBalance = authorbalance.minus(wamount);
 			var withdrawAmountTxFeesCheck = Big(wamount).minus(Big(withdraw_tx_fees));
 			if (checkEnoughBalance.gte(Big(0)) && withdrawAmountTxFeesCheck.gt(Big(0))) {
-				wamount = wamount.minus(Big(withdraw_tx_fees));
+				wamount = Number(wamount.minus(Big(withdraw_tx_fees))) * 1000000000000;
+				console.log(wamount, typeof wamount)
 				if (log3) console.log("Function withdraw: withdraw amount (wamount) minus tx fees" + wamount.toString());
 				minusBalance(authorId, wamount_before_txfees, function () {
 					if (log3) console.log("Function withdraw: wamount passed into transfer " + wamount);
-					Wallet.transfer({ amount: wamount, address: walletaddress }).then(function (txh) {
+					Wallet.transfer({destinations: [{amount: wamount, address: walletaddress}], mixin: config.block_maturity_requirement, fee: config.default_fee}).then(function (txh) {
 						if (txh.hasOwnProperty("tx_hash") == false) {
 							if (log3) console.log("Function withdraw: " + txh);
 							if (txh.hasOwnProperty("code") == true) {
@@ -639,13 +649,14 @@ function UpdateBalanceForUser(g_userid, callback) {
 	console.log("UpdateBalanceForUser function called");
 	var walletheight;
 	var bPaymentFound = false;
-	Daemon.getheight().then(function (data) {
-		if (!data.hasOwnProperty("height")) {
+	Wallet.get_wallet_info().then(function (data) {
+		console.log(data.current_height)
+		if (!data.hasOwnProperty("current_height")) {
 			console.log("Cannot get current wallet blockchain height! For security reasons, skipping the balance update");
 			callback();
 			return;
 		}
-		walletheight = data.height;
+		walletheight = data.current_height;
 		console.log(walletheight);
 		var dbo = db.db("TipBot");
 		var query = { userid: g_userid };
@@ -653,7 +664,7 @@ function UpdateBalanceForUser(g_userid, callback) {
 			if (err) throw err;
 			if (result == null) { callback(); return; }
 			if (log3) console.log(result.paymentid);
-			Wallet.get_bulk_payments([result.paymentid], result.lastdepositbh).then(function (bulkdata) {
+			Wallet.get_bulk_payments({payment_ids: [result.paymentid], min_block_height: result.lastdepositbh}).then(function (bulkdata) {
 				if (bulkdata.hasOwnProperty("payments")) {
 					getUserObject(g_userid, function (userobject) {
 						var lastcheckheight = 0;
@@ -693,16 +704,21 @@ function UpdateBalanceForUser(g_userid, callback) {
 }
 
 function createNewUser(targetId, callback) {
-	var dbo = db.db("TipBot");
-	var initial_balance = 0;
-	initial_balance = initial_balance.toFixed(coin_total_units);
-	var pid = crypto.randomBytes(32).toString('hex');
-	var newUser = { userid: targetId, balance: initial_balance, paymentid: pid, lastdepositbh: 0, canreceivetip: 1, cantip: 1 };
-	dbo.collection("users").insertOne(newUser, function (err, res) {
-		if (err) throw err;
-		console.log("User " + targetId + " added into DB");
-		callback();
-	});
+	Wallet.make_integrated_address().then(function(data, err){
+		if(!data){
+			console.log(err, 'error getting the integrated address');
+		 } else { 
+			var dbo = db.db("TipBot");
+			var initial_balance = 0;
+			initial_balance = initial_balance.toFixed(coin_total_units);
+			var newUser = { userid: targetId, balance: initial_balance, paymentid: data.payment_id, useraddress: data.integrated_address, lastdepositbh: 0, canreceivetip: 1, cantip: 1 };
+			dbo.collection("users").insertOne(newUser, function (err, res) {
+				if (err) throw err;
+				console.log("User " + targetId + " added into DB");
+				callback();
+			});
+	}})
+	
 }
 
 function getUserObject(targetId, callback) {
