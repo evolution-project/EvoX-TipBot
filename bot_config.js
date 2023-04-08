@@ -5,7 +5,7 @@ module.exports = {
     bot_token : "MTA5MTM1Mjk1*******************************CnaK7WD0nbzVYeI0",
     mongodburl: "mongodb://127.0.0.1:27017/TipBot",
     
-    owner_id : "939918743805497375",
+    owner_id : "939918743805497375",   // my id---> 208496265082830848
     coin_name : "EvoX",
     block_maturity_requirement : 10,
     coin_total_units : 12,
