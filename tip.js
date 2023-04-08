@@ -28,7 +28,7 @@ var coin_display_units = config.coin_display_units;
 var server_wallet_address = config.server_wallet_address;
 var withdraw_tx_fees = config.withdraw_tx_fees;
 var withdraw_min_amount = config.withdraw_min_amount;
-var wait_time_for_withdraw_confirm = config.wait_time_for_withdraw_confirm; // default 20 seconds
+var wait_time_for_withdraw_confirm = config.wait_time_for_withdraw_confirm; // default 30 seconds
 var custom_message_limit = config.custom_message_length_limit; // 100 characters
 var log1 = config.log_1; // log initial output
 var log2 = config.log_2; // log transaction processing and output, logging
@@ -105,7 +105,7 @@ function getBlockInfo(callback) {
 
 bot.on('ready', function () {
 	if (log1) console.log("EvoX TipBot ready and loaded correctly! Hello, admin");
-	bot.user.setActivity('WOT');
+	bot.user.setActivity('.help');
 });
 
 function logBlockChainTransaction(incoming, authorId, paymentid, destination_wallet_address, blockheight, amount) {
@@ -149,7 +149,7 @@ function logLocalTransaction(from, to, fromname, toname, amount) {
 }
 
 function isCallingBot(msg) {
-	if (msg[0] == "/") {
+	if (msg[0] == ".") {
 		return true;
 	} else { return false; }
 }
@@ -162,7 +162,7 @@ function convertToSystemValue(value) {
 
 function checkCommand(msg) {
 	if (isCallingBot(msg.content) == true) {
-		var arguments = msg.content.replace(/\s+/g,'/').trim().split('/');  // removes additional spaces
+		var arguments = msg.content.replace(/\s+/g,'.').trim().split('.');  // removes additional spaces
 		var command = arguments[1];
 		if (isBotListening == false && msg.author.id == owner_id) {
 			if (command == "startlistening") {
@@ -187,13 +187,60 @@ function checkCommand(msg) {
 					}
 				});
 				break;
+
+            case 'joinreward':
+                    var user = arguments[2];
+                    var amount = 5;
+                    var custom_message = "";
+                    if (user == null) { msg.reply("Oops! Invalid syntax"); return; }
+                    if (amount == null) { msg.reply("Oops! Invalid syntax"); return; }
+                    try { user = msg.mentions.users.first().username; } catch (error) { msg.reply("Oops! Invalid syntax"); return; } /// check to avoid bot crash
+                    try { custom_message = getCustomMessageFromTipCommand(arguments); } catch (err) { msg.reply("Oops! Something happened"); return; }
+                    var tiptarget = msg.mentions.users.first().id;
+                    var myname = msg.author.username;
+                    if (tiptarget != null) {
+                                    getBalance(msg.author.id, msg, function (data) {
+                            TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
+                                    if (success == true) {
+                                            msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + " Thank you for join our community, here's your join reward. Have a nice stay. :beer: ");
+                                                    msg.author.send("Current balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!" + "\n <@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + "!" + custom_message + "\n Left balance " + formatDisplayBalance((data.balance)-amount) + " " + coin_name + "!");
+                                    } else { msg.channel.send(message); }
+                                })});
+                    } else {
+                            msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
+                    }
+                    break;
+
 			case 'adminhelp':
 				isAdmin(msg.author.id, function (result) {
 					if (result == true) {
-						msg.author.send("Hello! Welcome to the ADMIN HELP SECTION. \n To show user info, type \"/ userinfo userid\" \n To add an admin, type \"/ addadmin userid\" (only available for owner) \n To remove an admin, type \"/ removeadmin userid\" (only available for owner) \n To disable tipping for a user, type \"/ switchtipsend userid allow/disallow\" \n To disable receive of tips for a user, type \"/ switchtipreceive userid allow/disallow\" \n To stop the bot from listening to commands, type \"/ stoplistening\" \n To start bot listening to commands, type \"/ startlistening\" (only available to bot owner) \n To display wallet info, type \"/ walletinfo\" (only available to bot owner) \n To display block height, type \"/ block\" (only)");
+						msg.author.send("__Hello! Welcome to the ADMIN HELP SECTION.__ \n" +
+
+								"\n" +
+
+								"Show user info - \`.userinfo userid\` \n" +
+
+								"Add an admin - \`.addadmin userid\` \n" +
+
+								"Remove an admin - \`.removeadmin userid\` \n" +
+
+								"Disable tipping for a user - \`.switchtipsend userid allow/disallow\` \n" +
+
+								"Disable receive of tips for a user - \`.switchtipreceive userid allow/disallow\` \n" +
+
+								"Stop the bot from listening to commands - \`.stoplistening\` \n" +
+
+								"Start bot listening to commands - \`.startlistening\` \n" +
+
+								"Display bot wallet info - \`.walletinfo\` \n" +
+
+								"Display block height - \`.block\` \n" +
+
+								"Tip user for join discord - \`.joinreward\` ");
 					}
 				});
 				break;
+
 			case 'about':
 				msg.author.send("Hello! This is EvoX TIP Bot version 0.1 \n Source based on Mojo-LB/CryptonoteTipBot repository :thumbsup: \n Created Cosmos & ArtFix for Evolution Network ");
 				break;
@@ -203,27 +250,41 @@ function checkCommand(msg) {
 
 					break;
 			case 'help':
-				msg.author.send("Hello! Welcome to Evolution TipBot help section. \n" + 
-				"About authors, type \`/about`\ \n" +
-				"To send someone 5 EVOX for a beer \`/beer\` \n" +
-				"For deposits, type \`/deposit\` \n" +
-				"For withdrawals, type \`/withdraw <walletaddress> <amount>\` (withdrawal fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdrawal amount is " + withdraw_min_amount + " " + coin_name + ". \n" +
-				"To tip someone, type \`/tip <user_mention> <amount> <Optional: small message>\` \n" +
-				"Blochchain height \`/block\` \n" +
-				"Your balance \`/balance\` \n" +
-				"We are not responsible for any system abuse, please don't deposit/leave big amounts ");
+				msg.author.send("__Hello! Welcome to Evolution TipBot help section.__ \n" +
+
+				"\n" +
+
+				"About bot - \`.about`\ \n" +
+
+				"Deposits EvoX - \`.deposit\` \n" +
+
+				"Withdraw EvoX to your wallet - \`.withdraw <walletaddress> <amount>\` \n" +
+
+				"Withdraw fee is " + withdraw_tx_fees + " " + coin_name + ".), minimum withdraw amount is " + withdraw_min_amount + " " + coin_name + ". \n" +
+
+				"Tip some user - \`.tip <user> <amount> <Optional: small message>\` \n" +
+
+				"Give some user a Beer - \`.beer <user>\` (price of 1 beer is 5 EvoX) \n" +
+
+				"Show blochchain height - \`.block\` \n" +
+
+				"Your balance - \`.balance\` \n" +
+
+				"\n" +
+
+				"_IMPORTANT !!! We are not responsible for any system abuse, please don't deposit/leave big amounts in tip bot wallet._");
 				break;
-      case 'test':
-            get_height(function (heightmessage) {
-              msg.channel.send(heightmessage);
-            });
-          break;
+    		case 'test':
+            	get_height(function (heightmessage) {
+              		msg.channel.send(heightmessage);
+            	});
+          		break;
 			case 'balance':
 				getBalance(msg.author.id, msg, function (data) {
 					msg.author.send("Hey! Your balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!");
 				});
 				break;
-  		case 'deposit':
+  			case 'deposit':
 				getBalance(msg.author.id, msg, function (data) {
 					msg.author.send("Hey! For deposit into the tip bot, use address: " + data.useraddress);
 				});
@@ -255,7 +316,7 @@ function checkCommand(msg) {
 					msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
 				}
 				break;
-				case 'beer':
+			case 'beer':
 					var user = arguments[2];
 					var amount = 5;
 					var custom_message = "";
@@ -269,7 +330,7 @@ function checkCommand(msg) {
 							getBalance(msg.author.id, msg, function (data) {
 						TipSomebody(msg, msg.author.id, tiptarget, user, myname, amount, function (success, message) {
 							if (success == true) {
-								msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + " to have a good weekend :beer: ");
+								msg.channel.send("<@" + tiptarget + "> has been tipped " + formatDisplayBalance(amount) + " " + coin_name + " :moneybag: by " + msg.author + " to have a good one. :beer: ");
 									msg.author.send("Current balance is " + formatDisplayBalance(data.balance) + " " + coin_name + "!" + "\n <@" + tiptarget + "> has been succesfully tipped " + formatDisplayBalance(amount) + " " + coin_name + "!" + custom_message + "\n Left balance " + formatDisplayBalance((data.balance)-amount) + " " + coin_name + "!");
 							} else { msg.channel.send(message); }
 
