@@ -20,7 +20,8 @@ var urldb = config.mongodburl;
 
 Initialize();
 
-var owner_id = config.owner_id;
+var owner_id_1 = config.owner_id_1;
+var owner_id_2 = config.owner_id_2;
 var coin_name = config.coin_name;
 var block_maturity_requirement = config.block_maturity_requirement;
 var coin_total_units = config.coin_total_units;
@@ -164,7 +165,7 @@ function checkCommand(msg) {
 	if (isCallingBot(msg.content) == true) {
 		var arguments = msg.content.replace(/\s+/g,'.').trim().split('.');  // removes additional spaces
 		var command = arguments[1];
-		if (isBotListening == false && msg.author.id == owner_id) {
+		if (isBotListening == false && (msg.author.id == owner_id_1 || msg.author.id == owner_id_2)) {
 			if (command == "startlistening") {
 				isBotListening = true;
 				msg.author.send("Bot returned to life again");
@@ -173,7 +174,7 @@ function checkCommand(msg) {
 		if (isBotListening == false) { return; }
 		switch (command) {
 			case 'walletinfo':
-				if (msg.author.id == owner_id) {
+				if (msg.author.id == owner_id_1 || msg.author.id == owner_id_2) {
 					getWalletInfo(function (walletmessage) {
 						msg.author.send(walletmessage);
 					});
@@ -189,12 +190,13 @@ function checkCommand(msg) {
 				break;
 
             case 'joinreward':
+				if (msg.author.id == owner_id_1 || msg.author.id == owner_id_2){
                     var user = arguments[2];
                     var amount = 5;
                     var custom_message = "";
-                    if (user == null) { msg.reply("Oops! Invalid syntax"); return; }
-                    if (amount == null) { msg.reply("Oops! Invalid syntax"); return; }
-                    try { user = msg.mentions.users.first().username; } catch (error) { msg.reply("Oops! Invalid syntax"); return; } /// check to avoid bot crash
+                    if (user == null) { msg.reply("Oops! Invalid syntax 1"); return; }
+                    if (amount == null) { msg.reply("Oops! Invalid syntax 2"); return; }
+                    try { user = msg.mentions.users.first().username; } catch (error) { msg.reply("Oops! Invalid syntax 3"); return; } /// check to avoid bot crash
                     try { custom_message = getCustomMessageFromTipCommand(arguments); } catch (err) { msg.reply("Oops! Something happened"); return; }
                     var tiptarget = msg.mentions.users.first().id;
                     var myname = msg.author.username;
@@ -208,7 +210,7 @@ function checkCommand(msg) {
                                 })});
                     } else {
                             msg.reply("User \"" + user + "\" not found :( . Check if the name is correct");
-                    }
+                    }}
                     break;
 
 			case 'adminhelp':
@@ -376,7 +378,7 @@ function checkCommand(msg) {
 				break;
 			case 'addadmin':
 				var user = arguments[2];
-				if (user != null && msg.author.id == owner_id) {
+				if (user != null && (msg.author.id == owner_id_1 || msg.author.id == owner_id_2)) {
 					addAdmin(msg.author.id, user, function (callbackmsg) {
 						msg.reply(callbackmsg);
 					});
@@ -386,7 +388,7 @@ function checkCommand(msg) {
 				break;
 			case 'removeadmin':
 				var user = arguments[2];
-				if (user != null && msg.author.id == owner_id) {
+				if (user != null && (msg.author.id == owner_id_1 || msg.author.id == owner_id_2)) {
 					removeAdmin(msg.author.id, user, function (callbackmsg) {
 						msg.reply(callbackmsg);
 					});
@@ -495,7 +497,7 @@ function generateNewPaymentIdForUser(authorId, targetId, callback) {
 }
 
 function isAdmin(authorId, callback) {
-	if (authorId == owner_id) { callback(true); return; }
+	if (authorId == owner_id_1 || authorId == owner_id_2) { callback(true); return; }
 	var dbo = db.db("TipBot");
 	dbo.collection("admins").findOne({ userid: authorId }, function (err, result) {
 		if (err) throw err;
